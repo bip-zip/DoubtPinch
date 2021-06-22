@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+    {% load static %}
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+        <title>Login|DoubtPinch</title>
+    </head>
+    <style>
+        ::-webkit-input-placeholder {
+            text-align: center;
+        }
+
+        body {
+            background-image: url("{% static 'background.jpg' %}");
+            background-position: center;
+            /* Center the image */
+            background-repeat: no-repeat;
+            /* Do not repeat the image */
+            background-size: cover;
+            /* Resize the background image to cover the entire container */
+        }
+    </style>
+
+    <body>
+        <!-- Navbar  -->
+        <nav class="navbar navbar-light bg-light">
+            <div class="ms-4">
+                <a class="navbar-brand" href="home.html">
+                    <img src="{% static 'accounts/pics/logo.png' %}" alt="" width="190" height="80">
+
+                </a>
+            </div>
+        </nav>
+        <!-- end of Navbar -->
+        <!-- Content  -->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6 d-lg-block d-sm-none d-none ">
+                    <img src="{% static 'man.png'%}" width="400" alt="pic">
+
+                </div>
+                <div class="col-lg-6 col-md-10 col-sm-12 col-12  rounded-3 p-4 shadow mb-5">
+                    <p class="fw-light fs-4 text-center text-dark">Login to DoubtPinch</p>
+                    <div class="mt-5  col-lg-8 mx-auto">
+
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <input type="text" class="form-control fw-light fs-6" id="exampleInputEmail1"
+                                    placeholder="Email">
+                            </div>
+
+                            <div class="mb-4">
+                                <input type="password" class="form-control fw-light fs-6" id="exampleInputPassword1"
+                                    placeholder="Password">
+                            </div>
+
+                            <div class="d-flex justify-content-center mt-4 mb-4">
+                                <button type="submit"
+                                    class="btn btn-danger col-md-4 col-sm-4 col-4 mx-auto fw-light">Login</button>
+                            </div>
+                        </form>
+
+                        <p class="text-center fw-light mb-1 text-dark">Have you registered? <a href="{% url 'accounts:signup' %}"
+                                class="text-decoration-none">Register here.</a></p>
+                        <a href="" class="text-decoration-none d-flex justify-content-center fw-light">Forget
+                            password?</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- End content -->
+
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+    </body>
+
+</html>
