@@ -1,0 +1,92 @@
+
+{% extends 'dpapp/base.html' %}
+        <title>{% block title%}Home {% endblock title%}</title>
+        {% block navbar%}
+
+        <div class="container">
+            <!-- Searchbar -->
+            <form class="d-flex mt-3">
+                <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search doubts"
+                    aria-label="Search">
+                <button class="btn btn-info text-light fw-bold" type="submit">Search</button>
+            </form>
+            <!-- End of search bar -->
+            <!-- Body -->
+            <div class="row mt-3 ">
+                <div class="col border shadow-sm p-3 mx-3 mb-3">
+                    <p class="fw-light fs-4 text-center">Trending Questions</p>
+                    {% for i in doubts %}
+
+                    <div class="mt-1">
+                        <div class="bg-light mt-2 p-3 rounded-3  ">
+                            <p class="h6 text-dark mb-3">{{i.title}}</p>
+
+                            <span class="badge rounded-pill bg-purple fw-normal">Python</span>
+                            <span class="badge rounded-pill  bg-purple fw-normal">Neo4j</span>
+                            <span class="badge rounded-pill  bg-purple fw-normal">GraphSQL</span>
+                        </div>
+
+                        <div class="d-flex bd-highlight mb-3">
+                            <div class="me-auto p-2 bd-highlight">
+                                <small class="text-muted">Posted by: <span class="fs-6 text-pinch">{{i.user.first_name}} {{i.user.last_name}}</span></small><br>
+                                <small class="text-muted">{{i.created_on}}</span></small>
+                            </div>
+                            <div class="p-2 bd-highlight">
+                                <div class="d-flex justify-content-center">
+                                    <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> {{i.total_replies}} Replies</a>
+                                    <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"><i
+                                            class="far fa-eye"></i> {{i.views}}</a>
+                                    <a href="{% url 'dpapp:detail' i.id %}" class="btn btn-doubt btn-sm text-pinch "><i
+                                            class="fas fa-reply"></i>&nbsp; Reply</a>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    {% endfor %}
+        
+
+             
+
+
+
+                </div>
+                <div class="col-lg-4 col-11 border shadow-sm mx-3 py-3 px-4 mb-3">
+                    <p class="fw-light fs-6 text-center">New Questions</p>
+
+                    <a href="" class="text-pinch text-decoration-none fs-6">
+                        <p>How to start usability testing of a physical product? </p>
+                    </a>
+                    <!-- Repeatating -->
+                    <a href="" class="text-pinch text-decoration-none fs-6">
+                        <p>How to start usability testing of a physical product? </p>
+                    </a>
+                    <a href="" class="text-pinch text-decoration-none fs-6">
+                        <p>How to start usability testing of a physical product? </p>
+                    </a>
+                    <a href="" class="text-pinch text-decoration-none fs-6">
+                        <p>How to start usability testing of a physical product? </p>
+                    </a>
+                    <a href="" class="text-pinch text-decoration-none fs-6">
+                        <p>How to start usability testing of a physical product? </p>
+                    </a>
+                    <a href="" class="text-pinch text-decoration-none fs-6">
+                        <p>How to start usability testing of a physical product? </p>
+                    </a>
+                    <!-- End repetating -->
+
+
+
+                </div>
+            </div>
+
+            <!-- end Body -->
+
+
+
+
+        </div>
+{% endblock %}

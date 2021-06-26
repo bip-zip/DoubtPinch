@@ -1,0 +1,37 @@
+{% extends 'dpapp/base.html' %}
+{% load bootstrap %}
+<title>{% block title%}AddDoubt {% endblock title%}</title>
+{% block navbar%}
+
+
+
+
+
+<div class="container">
+   
+  
+        <div class="border shadow-sm p-3 mx-3 mt-5 mb-3">
+
+            <h4 class="text-center fw-light">Add a doubt</h4>
+
+
+
+            <form method="post" enctype="multipart/form-data">
+                <hr>
+                {% csrf_token %}
+                {{form|bootstrap}}
+                
+                <div class="mt-4  d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary btn-sm col-3">Post</button>
+                </div>
+            </form>
+    
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock%}

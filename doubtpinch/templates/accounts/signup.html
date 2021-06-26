@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     {% load static %}
+    {% load bootstrap %}
 
     <head>
         <!-- Required meta tags -->
@@ -11,21 +12,23 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
-        <title>Login|DoubtPinch</title>
+        <title>Signup|DoubtPinch</title>
     </head>
     <style>
         ::-webkit-input-placeholder {
             text-align: center;
         }
 
-        body {
-            background-image: url("{% static 'background.jpg' %}");
-            background-position: center;
-            /* Center the image */
-            background-repeat: no-repeat;
-            /* Do not repeat the image */
-            background-size: cover;
-            /* Resize the background image to cover the entire container */
+        .form-group label {
+            display: none;
+        }
+
+        .help-block {
+            display: none;
+        }
+
+        ul {
+            display: none;
         }
     </style>
 
@@ -33,7 +36,7 @@
         <!-- Navbar  -->
         <nav class="navbar navbar-light bg-light">
             <div class="ms-4">
-                <a class="navbar-brand" href="home.html">
+                <a class="navbar-brand" href="">
                     <img src="{% static 'accounts/pics/logo.png' %}" alt="" width="190" height="80">
 
                 </a>
@@ -44,15 +47,35 @@
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-6 d-lg-block d-sm-none d-none ">
-                    <img src="{% static 'man.png'%}" width="400" alt="pic">
+                    <img src="{% static 'signup.png'%}" width="500" alt="pic">
 
                 </div>
                 <div class="col-lg-6 col-md-10 col-sm-12 col-12  rounded-3 p-4 shadow mb-5">
                     <p class="fw-light fs-4 text-center text-dark">Use college's email to sign in.</p>
+                    {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+                    <div class="col-lg-8 mx-auto">
+                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                            <strong></strong>{{message}} 😀
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    {% endif %} {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR%}
+
+                    <div class="col-lg-8 mx-auto">
+                        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                            <strong></strong> {{message}} 😶
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
                     <div class="mt-5  col-lg-8 mx-auto">
 
-                        <form action="home.html">
-                            <div class="mb-4">
+                        <form method="POST" enctype="multipart/form-data"
+                            data-validate-email-url="{% url 'accounts:validate_user' %}">
+                            <!-- <div class="mb-4">
                                 <input type="text" class="form-control fw-light fs-6" id="exampleInputEmail1"
                                     placeholder="Username">
                             </div>
@@ -70,22 +93,85 @@
                                 <input type="password" class="form-control fw-light fs-6" id="exampleInputPassword1"
                                     placeholder="Confirm Password">
                             </div>
-    
+                            
+     -->
+
+                            {{form|bootstrap}}
+
+                            {% csrf_token%}
+
                             <div class="d-flex justify-content-center mb-4">
                                 <button type="submit"
                                     class="btn btn-danger col-md-4 col-sm-4 col-4 mx-auto fw-light">Register</button>
                             </div>
                         </form>
-    
-                        <p class="text-center fw-light mb-1 text-dark">Already have an account ?<a href="{% url 'accounts:login' %}"
-                                class="text-decoration-none">Login here.</a></p>
-                        
+
+                        <p class="text-center fw-light mb-1 text-dark">Already have an account? <a
+                                href="{% url 'accounts:login' %}" class="text-decoration-none">Login here.</a></p>
+
                     </div>
                 </div>
 
             </div>
         </div>
         <!-- End content -->
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $('document').ready(function(){
+
+
+            $('input').addClass('fw-light')
+            $('input').addClass('fs-6')
+            $('input').addClass('mb-4')
+            $('#id_email').attr('placeholder', '012345@softwarica.edu.np')
+            
+            $('#id_first_name').attr('placeholder', 'First Name')
+            $('#id_last_name').attr('placeholder', 'Last Name')
+            $('#id_password1').attr('placeholder', 'Password')
+            $('#id_password2').attr('placeholder', 'Confirm Password')
+
+         
+
+            $("#id_email").on('blur', function () {
+                var form = $(this).closest("form");
+                var email_state = false;
+                var email = $('#id_email').val();
+
+                if (email == '') {
+                    email_state = false;
+                    return;
+                }
+                else if(email.split("@")[1] != 'softwarica.edu.np'){
+                    email_state = false;
+                    alert("Needs softwarica's email, something like: 012345@softwarica.edu.np");
+                    $('#id_email').val('');
+                    return;
+                }
+                                
+                $.ajax({
+                    url: form.attr("data-validate-email-url"),
+                    data: form.serialize(),
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.is_taken) {
+                                email_state = false;
+                            
+                                alert(data.error_message);
+                                $('#id_email').val('');
+                        }
+                        else{
+                            email_state = true;
+        
+                        }
+                    }
+                });
+
+            });
+        });
+
+        </script>
 
 
 

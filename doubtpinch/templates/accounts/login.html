@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     {% load static %}
+    {% load bootstrap %}
 
     <head>
         <!-- Required meta tags -->
@@ -18,22 +19,16 @@
             text-align: center;
         }
 
-        body {
-            background-image: url("{% static 'background.jpg' %}");
-            background-position: center;
-            /* Center the image */
-            background-repeat: no-repeat;
-            /* Do not repeat the image */
-            background-size: cover;
-            /* Resize the background image to cover the entire container */
-        }
+      .form-group label{
+          display: none;
+      }
     </style>
 
     <body>
         <!-- Navbar  -->
         <nav class="navbar navbar-light bg-light">
             <div class="ms-4">
-                <a class="navbar-brand" href="home.html">
+                <a class="navbar-brand" href="">
                     <img src="{% static 'accounts/pics/logo.png' %}" alt="" width="190" height="80">
 
                 </a>
@@ -49,10 +44,46 @@
                 </div>
                 <div class="col-lg-6 col-md-10 col-sm-12 col-12  rounded-3 p-4 shadow mb-5">
                     <p class="fw-light fs-4 text-center text-dark">Login to DoubtPinch</p>
+
+                    {% for message in messages %} 
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                  
+                    <div class="col-lg-8 mx-auto">
+                      <div
+                        class="alert alert-success alert-dismissible fade show text-center"
+                        role="alert"
+                      >
+                        <strong></strong>{{message}} 😀
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="alert"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                    </div>
+                    {% endif %} {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR%}
+                  
+                    <div class="col-lg-8 mx-auto">
+                      <div
+                        class="alert alert-danger alert-dismissible fade show text-center"
+                        role="alert"
+                      >
+                        <strong></strong> {{message}} 😶
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="alert"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                    </div>
+                    {% endif %} 
+                    {% endfor %}
                     <div class="mt-5  col-lg-8 mx-auto">
 
                         <form method="POST" enctype="multipart/form-data">
-                            <div class="mb-4">
+                            <!-- <div class="mb-4">
                                 <input type="text" class="form-control fw-light fs-6" id="exampleInputEmail1"
                                     placeholder="Email">
                             </div>
@@ -60,7 +91,12 @@
                             <div class="mb-4">
                                 <input type="password" class="form-control fw-light fs-6" id="exampleInputPassword1"
                                     placeholder="Password">
-                            </div>
+                            </div> -->
+
+                            {{form|bootstrap}}
+
+                            {% csrf_token%}
+
 
                             <div class="d-flex justify-content-center mt-4 mb-4">
                                 <button type="submit"
@@ -80,6 +116,17 @@
         </div>
         <!-- End content -->
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $('input').addClass('fw-light')
+            $('input').addClass('fs-6')
+            $('input').addClass('mb-4')
+            $('#id_username').attr('placeholder','Email')
+            $('#id_password').attr('placeholder','Password')
+
+
+        </script>
 
 
 

@@ -42,7 +42,7 @@ from django.http import HttpResponse
 
 
 class UserLogoutView(LogoutView):
-    success_url = reverse_lazy('userauth:home')
+    success_url = reverse_lazy('accounts:home')
     template_name = 'logged_out'
 
 class UserSignin(CreateView):
@@ -69,7 +69,7 @@ class UserSignin(CreateView):
             #send confirmation email
             current_site = get_current_site(request)
             subject = 'Activate your account'
-            message = render_to_string('account_activate_email.html', {
+            message = render_to_string('accounts/account_activate_email.html', {
                 'user':user,
                 'domain':current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.id)),
@@ -78,7 +78,7 @@ class UserSignin(CreateView):
             print(message)
             user.email_user(subject, message, from_email=None, **kwargs)
             messages.success(request, 'Please confirm your email to complete registration')
-            return redirect('appusers:login')
+            return redirect('accounts:login')
         return render(request, self.template_name, {'form':form})
 
 class ActivateAccount(View):
@@ -90,13 +90,7 @@ class ActivateAccount(View):
             # print(uid)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             user = None
-        # User = get_user_model()
-        # print(uid)
-        # uid = force_text(urlsafe_base64_decode(uidb64))#.decode()
-        # # uid = int(uida,10) invalid literal for int() with base 10: b'l\xc4'
-        # #the value of uid is b'l\xcc' need to convert this to 1
-        # user = User.objects.get(id=uid)
-        # # print(uid)
+     
 
         if user is not None and default_token_generator.check_token(user, token):
             # obj, created = User.objects.get_or_create(user=user)
@@ -105,7 +99,7 @@ class ActivateAccount(View):
             user.save()
             login(request, user)
             messages.success(request,('Your account have been confirmed.'))
-            return redirect('userauth:login')
+            return redirect('accounts:login')
         else:
             # messages.warning(request, ('The confirmation link was invalid, possibly because it has already been used.'))
             # return redirect('accounts:activation_invalid')
@@ -117,6 +111,16 @@ def activation_sent_view(request):
 def activation_invalid_view(request):
     return render(request,'registration/activation_invalid.html')
 
+from django.http import JsonResponse
+
+def validate_user(request):
+    email = request.GET.get('email', None)
+    data = {
+        'is_taken': User.objects.filter(email__iexact=email, email_confirmed=True).exists()
+    }
+    if data['is_taken']:
+        data['error_message'] = 'A user with this email already exists.'
+    return JsonResponse(data)
 
 
 

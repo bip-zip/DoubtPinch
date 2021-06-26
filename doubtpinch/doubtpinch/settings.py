@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrapform',
     'django_summernote',
+    'dpapp',
   
 
 ]
@@ -121,9 +123,8 @@ AUTHENTICATION_BACKENDS = (
     
     'django.contrib.auth.backends.ModelBackend',
 )
-# LOGIN_REDIRECT_URL = 'aoapp:home'
-# LOGOUT_REDIRECT_URL = 'appusers:login'
-
+LOGIN_REDIRECT_URL = 'dpapp:home'
+LOGOUT_REDIRECT_URL = 'accounts:login'
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -157,3 +158,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER='herohiralaal14@gmail.com'
 EMAIL_HOST_PASSWORD='Incessant@44'
 EMAIL_USE_TLS = True
+
+
+
+

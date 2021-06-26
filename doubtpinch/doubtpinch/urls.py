@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+     path('jet/', include('jet.urls')),
     path('admin/', admin.site.urls),
-    path('', include('accounts.urls', namespace='accounts'))
+    path('', include('accounts.urls', namespace='accounts')),
+    path('summernote/', include('django_summernote.urls')),
+    path('app/', include('dpapp.urls', namespace='dpapp'))
 ]
