@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'bootstrapform',
     'django_summernote',
     'dpapp',
+    'sass_processor',
   
 
 ]
@@ -145,6 +146,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     STATIC_DIRS,
+]
+SASS_PROCESSOR_ROOT = STATIC_DIRS
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
 ]
 
 MEDIA_URL= '/media/'

@@ -4,7 +4,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
-    
+
 </style>
 
 
@@ -12,10 +12,10 @@
 
 <div class="container">
     <!-- Searchbar -->
-    <form class="d-flex mt-3">
-        <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search doubts" aria-label="Search">
+    <!-- <form class="d-flex mt-3">
+        <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search answers" aria-label="Search">
         <button class="btn btn-info text-light fw-bold" type="submit">Search</button>
-    </form>
+    </form> -->
     <!-- End of search bar -->
     <!-- Body -->
     <div class="row mt-3 ">
@@ -37,10 +37,40 @@
 
             <div class="reply-section">
                 <p class="h4 text-muted my-3">{{doubt.total_replies}} Replies:</p>
+
+                {% if answers.paginator.num_pages > 1 %}
+                <div class="demo">
+                    <nav class="pagination-outer" aria-label="Page navigation">
+                        <ul class="pagination">
+                           
+                            {% for i in answers.paginator.page_range %}
+                            {% if i == answers.number%}
+                            <li class="page-item active me-1"><a class="page-link" href="#">{{i}}</a></li>
+                            {% else %}
+                                {% if 'heading_contains' in request.get_full_path %}  
+                                <li class="page-item me-1"><a class="page-link" href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>
+                                {% else %}
+                                <li class="page-item me-1 "><a class="page-link"  href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                            {% endfor %}
+    
+                            
+    
+    
+                        </ul>
+                    </nav>
+                </div>
+                {%endif%}
+
+
+
+
+
                 {% for i in answers%}
                 <div class="border p-3 my-2">
-                    <span class="fs-6 fw-bold"> <i class="fas fa-user-circle"></i> &nbsp;{{i.user.first_name}} {{i.user.last_name}} <i
-                            class="fw-normal text-pinch">({{i.created_on}})</i></span>
+                    <span class="fs-6 fw-bold"> <i class="fas fa-user-circle"></i> &nbsp;{{i.user.first_name}}
+                        {{i.user.last_name}} <i class="fw-normal text-pinch">({{i.created_on}})</i></span>
                     <div class="my-2 mx-4" style="text-align: justify;">
                         {{i.description|safe}}
                     </div>
@@ -52,13 +82,13 @@
 
                     <div class="me-auto p-2 bd-highlight">
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-doubt btn-sm text-success me-1 px-3 fs-5 right-click" data-answer="{{i.id}}"><i
-                                    class="fas fa-check"></i></button>
+                            <button class="btn btn-doubt btn-sm text-success me-1 px-3 fs-5 right-click" data-bs-toggle="tooltip" data-bs-html="true" title="<small>The answer was helpful.</small>"
+                                data-answer="{{i.id}}"><i class="fas fa-check"></i></button>
 
                             <span class="h4 text-muted mx-1 point-count-{{i.id}}" class=>{{i.actual_vote}}</span>
 
-                            <button class="btn btn-doubt btn-sm text-pinch px-3 fs-5 wrong-click"  data-answer="{{i.id}}"><i
-                                    class="fas fa-times"></i></button>
+                            <button class="btn btn-doubt btn-sm text-pinch px-3 fs-5 wrong-click"
+                                data-answer="{{i.id}}" data-bs-toggle="tooltip" data-bs-html="true" title="<small>The answer wasn't helpful.</small>"><i class="fas fa-times"></i></button>
 
                         </div>
                     </div>
@@ -85,8 +115,7 @@
                         <!-- <textarea id="summernote" name="editordata" required></textarea> -->
                         <div class="d-flex justify-content-end mt-3">
                             <button type="submit" class="btn btn-primary btn-sm col-2 fw-light"
-                            onclick="return confirm ('You cannot edit the comment once it get published.')"
-                            >Reply</button>
+                                onclick="return confirm ('You cannot edit the comment once it get published.')">Reply</button>
                         </div>
                     </form>
                 </div>
@@ -138,56 +167,61 @@
     var element = $("label[for=id_description]");
     element.text('Your comment:')
 
-    $('.right-click').on('click',function(){
-        var answerid= $(this).data('answer');
+    $('.right-click').on('click', function () {
+        var answerid = $(this).data('answer');
         console.log(answerid);
 
-  
+
 
         $.ajax({
-            url:"{% url 'dpapp:save-rpoint' %}",
-            type:'post',
-            data:{
-                answer_id:answerid,
-                csrfmiddlewaretoken:"{{csrf_token}}"
+            url: "{% url 'dpapp:save-rpoint' %}",
+            type: 'post',
+            data: {
+                answer_id: answerid,
+                csrfmiddlewaretoken: "{{csrf_token}}"
             },
-            dataType:'json',
-            success:function(res){
-                
-                if(res.bool==true){
-                    $(".point-count-"+answerid).text(res.actualVote);
+            dataType: 'json',
+            success: function (res) {
+
+                if (res.bool == true) {
+                    $(".point-count-" + answerid).text(res.actualVote);
                     console.log(res.actualVote);
                 }
 
-            
+
             }
         });
 
     })
 
-    $('.wrong-click').on('click',function(){
-        var answerid= $(this).data('answer');
+    $('.wrong-click').on('click', function () {
+        var answerid = $(this).data('answer');
 
         $.ajax({
-            url:"{% url 'dpapp:save-wpoint' %}",
-            type:'post',
-            data:{
-                answer_id:answerid,
-                csrfmiddlewaretoken:"{{csrf_token}}"
+            url: "{% url 'dpapp:save-wpoint' %}",
+            type: 'post',
+            data: {
+                answer_id: answerid,
+                csrfmiddlewaretoken: "{{csrf_token}}"
             },
-            dataType:'json',
-            success:function(res){
-                
-                if(res.bool==true){
-                    $(".point-count-"+answerid).text(res.actualVote);
+            dataType: 'json',
+            success: function (res) {
+
+                if (res.bool == true) {
+                    $(".point-count-" + answerid).text(res.actualVote);
                     console.log(res.actualVote);
                 }
 
-            
+
             }
         });
 
     })
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
 
 
 </script>

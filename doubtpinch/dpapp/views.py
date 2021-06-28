@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView
 from .models import Doubt, Answer, RightPoint, WrongPoint
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .forms import DoubtForm, AnswerForm
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
 
 
 class Home(ListView):
@@ -11,9 +14,25 @@ class Home(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs) 
-        doubts=Doubt.objects.all().order_by('-id')
+        doubts=Doubt.objects.all().order_by('-views')
+        
+       
 
-        context.update({'doubts':doubts})
+        # order by max comments for a certain timestamp
+
+        newdoubts=Doubt.objects.all().order_by('-id')
+        paginator= Paginator(doubts, 2)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            doubts = paginator.page(page)
+        except PageNotAnInteger:
+            doubts = paginator.page(1)
+        except EmptyPage:
+            doubts = paginator.page(paginator.num_pages)
+
+        context.update({'doubts':doubts,'newdoubts':newdoubts,'page':page})
         return context
 
 
@@ -24,8 +43,21 @@ class Detail(TemplateView):
         context = super(Detail, self).get_context_data(**kwargs) 
         doubt_id= self.kwargs['id']
         doubt=Doubt.objects.get(id=doubt_id)
+        doubt.views = doubt.views + 1
+        doubt.save()
         answers= Answer.objects.filter(doubt=doubt)
-        context.update({'doubt':doubt,'answers':answers, 'form':AnswerForm})
+        
+        paginator= Paginator(answers, 2)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            answers = paginator.page(page)
+        except PageNotAnInteger:
+            answers = paginator.page(1)
+        except EmptyPage:
+            answers = paginator.page(paginator.num_pages)
+        context.update({'doubt':doubt,'answers':answers, 'form':AnswerForm, 'page':page})
         return context
 
     def post(self, request, **kwargs):
@@ -38,6 +70,8 @@ class Detail(TemplateView):
             form.instance.user=user
             form.save()
             return HttpResponseRedirect(self.request.path_info)
+        return HttpResponseRedirect(self.request.path_info)
+        
 
 
 
@@ -61,6 +95,15 @@ class PostDoubtView(CreateView):
     model = Doubt
     template_name = "dpapp/addDoubt.html"
     form_class = DoubtForm
+    success_url='dpapp:profile'
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        user= self.request.user
+        self.object.user=user
+        self.object.save()
+
+        return redirect('dpapp:profile')
 
 
 
@@ -133,3 +176,31 @@ def saveWPoint(request):
                 user=user)
             actualVote=answer.actual_vote
             return JsonResponse({'bool':True,'actualVote':actualVote})
+
+
+from django.db.models import Q
+class Search(TemplateView):
+    template_name="dpapp/search.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(Search, self).get_context_data(**kwargs) 
+        query = self.request.GET['query']
+        
+        doubts=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__icontains=query)).distinct()
+        counted=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__icontains=query)).distinct().count()
+       
+        paginator= Paginator(doubts,2)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            doubts = paginator.page(page)
+        except PageNotAnInteger:
+            doubts = paginator.page(1)
+        except EmptyPage:
+            doubts = paginator.page(paginator.num_pages)
+        context.update({'counted':counted,'doubts':doubts, 'form':AnswerForm, 'page':page})
+        return context
+
+   
+        

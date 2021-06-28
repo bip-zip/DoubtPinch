@@ -22,8 +22,10 @@
                 {{form|bootstrap}}
                 
                 <div class="mt-4  d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary btn-sm col-3">Post</button>
+                        <a href="{% url 'dpapp:profile'%}" type="submit" class="btn btn-danger btn-sm col-2 me-2" onclick="return confirm('Want to cancel the post?')">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-sm col-3" >Post</button>
                 </div>
+               
             </form>
     
 
