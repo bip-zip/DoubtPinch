@@ -42,7 +42,7 @@ class Answer(models.Model):
 
 class Comment(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE, related_name='commentor')
-    doubt=models.ForeignKey(Doubt,on_delete=models.CASCADE)
+    answer=models.ForeignKey(Answer,on_delete=models.CASCADE, null=True)
     description=models.TextField(null=True)
     created_on = models.DateTimeField(default=datetime.now, blank=True)
     updated=models.BooleanField(default=False)

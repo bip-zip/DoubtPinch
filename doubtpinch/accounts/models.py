@@ -11,6 +11,7 @@ class User(AbstractUser):
         max_length=255,
         unique=True,
     )
+    profile_pic= models.ImageField(upload_to='admin_pics', null=True, blank=True)
     # first_name = models.CharField(max_length=255)
     # last_name = models.CharField(max_length=255)
     email_confirmed = models.BooleanField(default=False) #initially this field is false but will se chan
@@ -19,6 +20,7 @@ class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
     is_seller = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
+
  
 
     USERNAME_FIELD = 'email'
@@ -31,7 +33,13 @@ class User(AbstractUser):
         # The user is identified by their email address
         return self.email
 
-    
+    @property
+    def ProfilePicUrl(self):
+        try:
+            url=self.profile_pic.url
+        except:
+            url=''
+        return url
    
 
     def get_short_name(self):

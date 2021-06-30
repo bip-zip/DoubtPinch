@@ -1,105 +1,173 @@
 {% extends 'dpapp/base.html' %}
 {% load static %}
+{% load bootstrap %}
 <title>{% block title%}Profile {% endblock title%}</title>
 {% block navbar%}
-        <div class="container">
-            <!-- Body -->
-            <div class="row mt-3 ">
-                <div class="col border shadow-sm p-3 mx-3 mb-3 order-lg-1  order-md-2 order-sm-2 order-2">
-                    <p class="fw-light fs-4 text-center">Recent Activities</p>
+<div class="container">
+    <!-- Body -->
+    <div class="row mt-3 ">
+        <div class="col border shadow-sm p-3 mx-3 mb-3 order-lg-1  order-md-2 order-sm-2 order-2">
+            <p class="fw-light fs-4 text-center">Recent Activities</p>
 
-                    <div class="mt-1">
-                        <div class="bg-light mt-2 p-3 rounded-3  ">
-                            <span class="fs-6 text-pinch ">You Replied to </span><br>
-                            <span class="text-muted" style="font-size: 12px;" >Rajeev Thapa | 2021, March 12, 04:44 pm</span>
+            <div class="mt-1">
+                <div class="bg-light mt-2 p-3 rounded-3  ">
+                    <span class="fs-6 text-pinch ">You Replied to </span><br>
+                    <span class="text-muted" style="font-size: 12px;">Rajeev Thapa | 2021, March 12, 04:44 pm</span>
 
-                            <p class="h6 text-dark mt-1 mb-3">Lorem ipsum, dolor sit amet consectetu
-                                r adipisicing elit. Natus, nostrum eaque!
-                                Temporibus officiis vero quasi ?</p>
+                    <p class="h6 text-dark mt-1 mb-3">Lorem ipsum, dolor sit amet consectetu
+                        r adipisicing elit. Natus, nostrum eaque!
+                        Temporibus officiis vero quasi ?</p>
 
-                            <span class="badge rounded-pill bg-purple fw-normal">Python</span>
-                            <span class="badge rounded-pill  bg-purple fw-normal">Neo4j</span>
-                            <span class="badge rounded-pill  bg-purple fw-normal">GraphSQL</span>
-                        </div>
-
-                        <div class="d-flex bd-highlight mb-3">
-                            <div class="me-auto p-2 bd-highlight">
-                                <!-- empty -->
-                            </div>
-                            <div class="p-2 bd-highlight">
-                                <div class="d-flex justify-content-center">
-                                    <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 22 Replies</a>
-                                    <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 10 <i
-                                            class="far fa-eye"></i></a>
-                                    <a href="" class="btn btn-doubt btn-sm text-pinch ">Take me to post</a>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-                    <!-- Repeatating -->
-                    <div class="mt-1">
-                        <div class="bg-light mt-2 p-3 rounded-3  ">
-                            <span class="fs-6 text-pinch ">You posted </span><br>
-                            <span class="text-muted" style="font-size: 12px;" >2021, March 12, 04:44 pm</span>
-
-                            <p class="h6 text-dark mb-3 mt-1">Lorem ipsum, dolor sit amet consectetu
-                                r adipisicing elit. Natus, nostrum eaque!
-                                Temporibus officiis vero quasi ?</p>
-
-                            <span class="badge rounded-pill bg-purple fw-normal">Python</span>
-                            <span class="badge rounded-pill  bg-purple fw-normal">Neo4j</span>
-                            <span class="badge rounded-pill  bg-purple fw-normal">GraphSQL</span>
-                        </div>
-
-                        <div class="d-flex bd-highlight mb-3">
-                            <div class="me-auto p-2 bd-highlight">
-                                <!-- empty -->
-                            </div>
-                            <div class="p-2 bd-highlight">
-                                <div class="d-flex justify-content-center">
-                                    <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 22 Replies</a>
-                                    <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 10 <i
-                                            class="far fa-eye"></i></a>
-                                    <a href="" class="btn btn-doubt btn-sm text-pinch ">Take me to post</a>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
-                    
-                    <!-- end Repeatating -->
-
-
-
+                    <span class="badge rounded-pill bg-purple fw-normal">Python</span>
+                    <span class="badge rounded-pill  bg-purple fw-normal">Neo4j</span>
+                    <span class="badge rounded-pill  bg-purple fw-normal">GraphSQL</span>
                 </div>
-                <div class="col-lg-4 col-11 border shadow-sm mx-3 py-3 px-4 mb-3 order-lg-2 order-md-1 order-sm-1 order-1">
 
-                    <div class="d-flex  justify-content-center">
-                        <img src="{% static 'accounts/pics/user.png' %}" alt="pic" class="rounded-circle shadow-sm" height="150" width="150"> 
+                <div class="d-flex bd-highlight mb-3">
+                    <div class="me-auto p-2 bd-highlight">
+                        <!-- empty -->
                     </div>
-                    <p class="fw-bold h6 text-center text-muted my-1">{{user.first_name}} {{user.last_name}}</p>
-                    <p class="fw-light text-center text-pinch my-1">Student</p>
-                    <p class=" text-center text-pinch my-1 mt-3">Points: <span class="fw-bold">77</span></p>
-                    <p class="text-center text-pinch my-1">Replies: <span class="fw-bold">13</span></p>
-                    <p class="text-center text-pinch border rounded-3 p-2 my-1 col-lg-6 col-md-4 col-sm-4 col-4 mx-auto h5">APR <span class="fw-bold text-success">89</span></p>
-                    <div class="d-flex justify-content-center">
-                        <a href="" class="btn btn-doubt text-light mt-2 col-lg-12 col-md-6 col-sm-6 col-6 mx-auto bg-purple">Post a question</a>
-                    </div>
+                    <div class="p-2 bd-highlight">
+                        <div class="d-flex justify-content-center">
+                            <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 22 Replies</a>
+                            <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 10 <i
+                                    class="far fa-eye"></i></a>
+                            <a href="" class="btn btn-doubt btn-sm text-pinch ">Take me to post</a>
 
+                        </div>
+
+                    </div>
                 </div>
+
+
+            </div>
+            <!-- Repeatating -->
+            <div class="mt-1">
+                <div class="bg-light mt-2 p-3 rounded-3  ">
+                    <span class="fs-6 text-pinch ">You posted </span><br>
+                    <span class="text-muted" style="font-size: 12px;">2021, March 12, 04:44 pm</span>
+
+                    <p class="h6 text-dark mb-3 mt-1">Lorem ipsum, dolor sit amet consectetu
+                        r adipisicing elit. Natus, nostrum eaque!
+                        Temporibus officiis vero quasi ?</p>
+
+                    <span class="badge rounded-pill bg-purple fw-normal">Python</span>
+                    <span class="badge rounded-pill  bg-purple fw-normal">Neo4j</span>
+                    <span class="badge rounded-pill  bg-purple fw-normal">GraphSQL</span>
+                </div>
+
+                <div class="d-flex bd-highlight mb-3">
+                    <div class="me-auto p-2 bd-highlight">
+                        <!-- empty -->
+                    </div>
+                    <div class="p-2 bd-highlight">
+                        <div class="d-flex justify-content-center">
+                            <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 22 Replies</a>
+                            <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 10 <i
+                                    class="far fa-eye"></i></a>
+                            <a href="" class="btn btn-doubt btn-sm text-pinch ">Take me to post</a>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
 
-            <!-- end Body -->
+
+            <!-- end Repeatating -->
+
+
+
         </div>
+        <div class="col-lg-4 col-11 border shadow-sm mx-3 py-3 px-4 mb-3 order-lg-2 order-md-1 order-sm-1 order-1">
+
+            <div class="d-flex  justify-content-center">
+                {% if not user.ProfilePicUrl == '' %}
+                <div>
+
+                    <img src="{{user.ProfilePicUrl}}" alt="pic" class="rounded-circle shadow-sm" height="150"
+                        width="150" style=" position: relative;
+                           
+                            left: 20px;">
+                    <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        style=" font-size: 30px;
+                            position: relative;
+                            top: 48px;
+                            left: -39px;">
+                        <i class="fas fa-plus-circle text-pinch"></i>
+                    </button>
+                </div>
+                {%else%}
+                <div>
+
+                    <img src="{% static 'accounts/pics/user.png' %}" alt="pic" class="rounded-circle shadow-sm" height="150"
+                        width="150" style=" position: relative;
+                           
+                            left: 20px;">
+                    <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        style=" font-size: 30px;
+                            position: relative;
+                            top: 48px;
+                            left: -39px;">
+                        <i class="fas fa-plus-circle text-pinch"></i>
+                    </button>
+                </div>
+
+
+                {%endif%}
+
+            </div>
+
+            <p class="fw-bold h6 text-center text-muted my-1">{{user.first_name}} {{user.last_name}}</p>
+
+
+            <p class="fw-light text-center text-pinch my-1">{{user.email}}</p>
+            <p class=" text-center text-pinch my-1 mt-3">Points: <span class="fw-bold">77</span></p>
+            <p class="text-center text-pinch my-1">Replies: <span class="fw-bold">13</span></p>
+            <p class="text-center text-pinch border rounded-3 p-2 my-1 col-lg-6 col-md-4 col-sm-4 col-4 mx-auto h5">APR
+                <span class="fw-bold text-success">89</span></p>
+            <div class="d-flex justify-content-center">
+                <a href="{% url 'dpapp:adddoubt' %}"
+                    class="btn btn-doubt text-light mt-2 col-lg-12 col-md-6 col-sm-6 col-6 mx-auto bg-purple">Post a
+                    question</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- end Body -->
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Profile Picture</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="/{{form.profile_pic.value}}">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {{form|bootstrap}}
+                        <!-- <textarea id="summernote" name="editordata" required></textarea> -->
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
-
-

@@ -41,7 +41,7 @@
                 {% if answers.paginator.num_pages > 1 %}
                 <div class="demo">
                     <nav class="pagination-outer" aria-label="Page navigation">
-                        <ul class="pagination">
+                        <ul class="pagination pagination-sm">
                            
                             {% for i in answers.paginator.page_range %}
                             {% if i == answers.number%}
@@ -95,8 +95,8 @@
 
                     <div class="p-2 bd-highlight">
                         <div class="d-flex justify-content-center">
-                            <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> 0 Comments</a>
-                            <a href="" class="btn btn-doubt btn-sm text-pinch "><i class="fas fa-reply"></i>&nbsp;
+                            <a href="" class="btn btn-doubt btn-sm text-pinch disabled me-1"> {{i.comment_set.count}} Comments</a>
+                            <a href="{% url 'dpapp:comment' i.id %}" class="btn btn-doubt btn-sm text-pinch "><i class="fas fa-reply"></i>&nbsp;
                                 Reply</a>
 
                         </div>
@@ -104,27 +104,13 @@
                     </div>
                 </div>
                 {% endfor %}
-                <!-- Your reply -->
-
-                <div class="mt-5">
-
-                    <form method="post" enctype="multipart/form-data">
-                        <hr>
-                        {% csrf_token %}
-                        {{form.as_p}}
-                        <!-- <textarea id="summernote" name="editordata" required></textarea> -->
-                        <div class="d-flex justify-content-end mt-3">
-                            <button type="submit" class="btn btn-primary btn-sm col-2 fw-light"
-                                onclick="return confirm ('You cannot edit the comment once it get published.')">Reply</button>
-                        </div>
-                    </form>
-                </div>
-                <!-- <div id="summernote"></div> -->
 
             </div>
 
 
         </div>
+       
+    
         <div class="col-lg-3 col-11 border shadow-sm mx-3 py-3 px-4 mb-3">
             <p class="fw-light fs-6 text-center">Related Questions</p>
 
@@ -154,7 +140,20 @@
         </div>
     </div>
 
+  
+
     <!-- end Body -->
+    <div class="mt-3 border shadow-sm p-3  mb-3">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <!-- <textarea id="summernote" name="editordata" required></textarea> -->
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-primary btn-sm col-2 fw-light"
+                    onclick="return confirm ('You cannot edit the comment once it get published.')">Reply</button>
+            </div>
+        </form>
+    </div>
 
 
 

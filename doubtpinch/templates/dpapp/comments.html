@@ -1,0 +1,73 @@
+
+{% extends 'dpapp/base.html' %}
+{% load static %}
+{% load bootstrap %}
+
+<!-- {% load sass_tags %} -->
+        <title>{% block title%}CommentDetail {% endblock title%}</title>
+        {% block navbar%}
+        <link rel="stylesheet" href="{% static 'dpapp/css/paginate.css' %}">
+
+        <style>
+            .form-group label {
+                display: none;
+            }
+        </style>
+
+        <div class="container">
+          
+            <!-- Body -->
+            <div class=" mt-3 ">
+                <div class="col border shadow-sm p-3 mx-3 mb-3">
+                    <p class="fw-light fs-4 text-center">Answer for : <b><a class="text-decoration-none text-dark" href="{% url 'dpapp:detail' answer.doubt.id %}">{{answer.doubt}}</a></b></p>
+                    
+                    <div class="mt-1">
+                        <div class="bg-light mt-2 p-3 rounded-3  ">
+                           
+                            <small class="text-muted">Replied by: <span class="fs-6 text-pinch">{{answer.user.first_name}} {{answer.user.last_name}}</span></small><hr>
+                            <p class="h6 text-dark mb-3">{{answer.description|safe}}</p>
+                            <small class="text-muted">{{i.created_on}}</span></small>
+                            
+                        </div>
+                    </div>
+                    {% if answer.comment_set.count == 0 %}
+                    <p class="fw-light fs-4 text-left mt-1">No comments</p>
+                    {% elif answer.comment_set.count == 1 %}
+                    <p class="fw-light fs-4 text-left mt-1">{{answer.comment_set.count}} comment:</p>
+                    {%else%}
+                    <p class="fw-light fs-4 text-left mt-1">{{answer.comment_set.count}} comments:</p>
+                    {%endif%}
+
+                    {% for i in comments%}
+                    <div class="mt-1">
+                        <div class="bg-white p-3 rounded-3  ">
+                            <span class="fs-6 text-pinch">{{i.user.first_name}} {{i.user.last_name}} |
+                                <small class="text-muted">{{i.created_on}}</small></span>
+                            <p class="h6 text-dark mb-3">{{i.description}}</p>
+                        </div>
+                    </div><hr>
+                    {% endfor %}
+
+
+
+                    
+                </div>
+                <div class="mt-3   mx-3 border shadow-sm p-3  mb-3">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{form|bootstrap}}
+                        <!-- <textarea id="summernote" name="editordata" required></textarea> -->
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="submit" class="btn btn-primary btn-sm col-2 fw-light"
+                                onclick="return confirm ('You cannot edit the comment once it get published.')">Reply</button>
+                        </div>
+                    </form>
+                </div>
+            
+              
+            </div>
+
+            <!-- end Body -->
+            
+        </div>
+{% endblock %}

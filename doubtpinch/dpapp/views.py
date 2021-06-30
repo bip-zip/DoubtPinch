@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView
-from .models import Doubt, Answer, RightPoint, WrongPoint
+from .models import Doubt, Answer, RightPoint, WrongPoint, Comment
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
-from .forms import DoubtForm, AnswerForm
+from .forms import DoubtForm, AnswerForm, CommentForm, ProfileForm
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
+from accounts.models import User
 
 
 class Home(ListView):
@@ -89,6 +90,36 @@ class Detail(TemplateView):
     
 class Profile(TemplateView):
     template_name="dpapp/profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(Profile, self).get_context_data(**kwargs) 
+        user=self.request.user
+        useremail=user.email
+        user=User.objects.get(email=useremail)
+        form= ProfileForm(instance=user)
+        context.update({ 'form':form})
+        return context
+
+    def post(self, request, **kwargs):
+        user=self.request.user
+        useremail=user.email
+        user=User.objects.get(email=useremail)
+
+        form=ProfileForm(request.POST, request.FILES, instance=user)
+        
+        if form.is_valid():
+            if request.FILES == '':
+                form.save()
+                return HttpResponseRedirect(self.request.path_info)
+            # form.instance.email=email
+            form.save()
+            return HttpResponseRedirect(self.request.path_info)
+        return HttpResponseRedirect(self.request.path_info)
+    
+        
+        
+        
+
 
 
 class PostDoubtView(CreateView):
@@ -204,3 +235,39 @@ class Search(TemplateView):
 
    
         
+class CommentView(TemplateView):
+    template_name="dpapp/comments.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentView, self).get_context_data(**kwargs) 
+        answer_id= self.kwargs['id']
+        answer= Answer.objects.get(id=answer_id)
+        comments= Comment.objects.filter(answer=answer)
+       
+        paginator= Paginator(comments,10)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            comments = paginator.page(page)
+        except PageNotAnInteger:
+            comments = paginator.page(1)
+        except EmptyPage:
+            comments = paginator.page(paginator.num_pages)
+
+        context.update({'comments':comments,'answer':answer, 'form':CommentForm, 'page':page})
+        return context
+    
+
+    def post(self, request, **kwargs):
+        form=CommentForm(request.POST)
+        user=self.request.user
+        answer_id= self.kwargs['id']
+        answer=Answer.objects.get(id=answer_id)
+        if form.is_valid():
+            form.instance.answer=answer
+            form.instance.user=user
+            form.save()
+            return HttpResponseRedirect(self.request.path_info)
+        return HttpResponseRedirect(self.request.path_info)
+
