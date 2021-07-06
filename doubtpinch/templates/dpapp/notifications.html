@@ -1,0 +1,84 @@
+{% extends 'dpapp/base.html' %}
+{% load static %}
+<!-- {% load sass_tags %} -->
+<title>{% block title%}Notifications {% endblock title%}</title>
+
+{% block navbar%}
+<link rel="stylesheet" href="{% static 'dpapp/css/paginate.css' %}">
+
+<div class="container">
+    <!-- Searchbar -->
+    <!-- <form class="d-flex mt-3" method="GET" action="/app/search">
+                <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search doubts" name="query" 
+                    aria-label="Search">
+                <button class="btn btn-info text-light fw-bold" type="submit">Search</button>
+            </form> -->
+    <!-- End of search bar -->
+    <!-- Body -->
+    <div class="row mt-3 ">
+        <div class="col border shadow-sm p-3 mx-3 mb-3">
+            <p class="fw-light fs-4 text-center">Notifications </p>
+         
+
+            <div class="mt-1">
+                <!--single line list with avtar -->
+                <ul class="list-group bg-light">
+
+
+                    {% for i in notifications%}
+                    <li class="list-group-item d-flex align-items-center ">
+                        
+                        <div class="me-4">
+                            <img alt="40x40" height="50" width="50" class="img-fluid" src="{{i.sender.ProfilePicUrl}}"
+                                data-holder-rendered="true">
+                        </div>
+                        {% if i.doubt == null %}
+
+                        <div class="me-2"><a class="text-decoration-none fw-light" href="{% url 'dpapp:comment' i.answer.id %}">{{i.sender.first_name}} {{i.sender.last_name}} commented to your the answer you replied.</a> </div><i class="fw-light" style="font-size: 0.8em;">({{i.date}})</i> 
+                        {% elif i.answer == null %}
+                        <div class="me-2"><a class="text-decoration-none fw-light" href="{% url 'dpapp:detail' i.doubt.id %}">{{i.sender.first_name}} {{i.sender.last_name}} has replied his solution to your doubt. </a> </div><i class="fw-light" style="font-size: 0.8em;">({{i.date}})</i> 
+                        {% endif %}
+                        <div class="ms-auto" >
+                            <input class="custom-control-input" type="checkbox" style="cursor: pointer;" value="" id="defaultCheck{{i.id}}" >
+                            <small class="fw-light" style="font-size: 0.8em;"  >Marked as seen</small>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <h3 class="text-centr">No notifications.</h3>
+                    {% endfor %}
+
+                    
+
+                    
+                </ul>
+
+            </div>
+          
+
+
+
+
+
+        </div>
+        <!-- <div class="col-lg-4 col-11 border shadow-sm mx-3 py-3 px-4 mb-3">
+            <p class="fw-light fs-6 text-center">New Questions</p>
+
+            {% for i in newdoubts%}
+
+            <a href="{% url 'dpapp:detail' i.id %}" class="text-pinch text-decoration-none fs-6">
+                <p>{{i.title}}</p>
+            </a>
+            {% endfor %}
+
+
+
+        </div> -->
+    </div>
+
+    <!-- end Body -->
+
+    <!-- Footer -->
+   
+</div>
+
+{% endblock %}

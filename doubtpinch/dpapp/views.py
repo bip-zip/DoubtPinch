@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView
-from .models import Doubt, Answer, RightPoint, WrongPoint, Comment
+from .models import Doubt, Answer, RightPoint, WrongPoint, Comment,Notification
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .forms import DoubtForm, AnswerForm, CommentForm, ProfileForm
 from django.core.paginator import Paginator
@@ -140,10 +140,6 @@ class Profile(TemplateView):
     
         
         
-        
-
-
-
 class PostDoubtView(CreateView):
     model = Doubt
     template_name = "dpapp/addDoubt.html"
@@ -293,3 +289,26 @@ class CommentView(TemplateView):
             return HttpResponseRedirect(self.request.path_info)
         return HttpResponseRedirect(self.request.path_info)
 
+class NotificationView(TemplateView):
+    template_name= 'dpapp/notifications.html'
+
+
+    def get_context_data(self, **kwargs):
+        context = super(NotificationView, self).get_context_data(**kwargs) 
+        user=self.request.user
+        notifications = Notification.objects.filter(user=user).order_by('-id')
+        
+        
+        paginator= Paginator(notifications, 2)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            notifications = paginator.page(page)
+        except PageNotAnInteger:
+            notifications = paginator.page(1)
+        except EmptyPage:
+            notifications = paginator.page(paginator.num_pages)
+
+        context.update({'notifications': notifications,'page':page})
+        return context

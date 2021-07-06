@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load humanize %}
 <html lang="en">
 
     <head>
@@ -14,6 +15,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
             crossorigin="anonymous" />
+<!-- Bootstrap downhover -->
+        <link href="{% static 'dpapp/downhover/css/animate.min.css' %}" rel="stylesheet">
+        <link href="{% static 'dpapp/downhover/css/bootstrap-dropdownhover.min.css' %}" rel="stylesheet">
         <title>{% block title%}{% endblock title%}| doubtPinch</title>
         <style>
             .bg-purple {
@@ -28,20 +32,22 @@
                 background-color: #d1eff2;
             }
 
-
-            .dark-theme{
+            .dark-theme {
                 background-color: #f1f3f7;
-                
-              
+
                 transition: all 1s ease-out;
             }
-            .light-theme{
+
+            .light-theme {
                 background-color: rgb(255, 255, 255);
                 color: rgb(26, 25, 25);
-              
-                transition: all 1s ease-out;
 
+                transition: all 1s ease-out;
             }
+           
+           
+
+            
         </style>
     </head>
 
@@ -59,17 +65,41 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav">
                         <li class="nav-item me-2">
-                            <a class="nav-link active fs-5" aria-current="page" href="#"><i
+
+                            <div class="dropdown ">
+                                <a class="nav-link active fs-5 dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" aria-current="page" href="#"><i
                                     class="fas fa-bell"></i><span class="badge rounded-pill bg-danger" style="
                     font-size: 10px;
                     position: relative;
                     top: -12px;
                     left: -2px;
-                  ">11</span>
+                  ">{{noti_count}}</span> Notifications
                             </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    {% for i in notifications%}
+                                    {% if i.doubt == null %}
+                                        <li><a class="dropdown-item fw-light " href="{% url 'dpapp:comment' i.answer.id %}"><i class="fas fa-comments"></i>&nbsp {{i.text_preview}} <i class="text-primary" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                    {% elif i.answer == null %}
+                                        <li><a class="dropdown-item fw-light " href="{% url 'dpapp:detail' i.doubt.id %}"><i class="fas fa-question-circle"></i>&nbsp {{i.text_preview}} <i class="text-primary" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+
+                                    {% endif %}
+                                  {% empty %}
+                                  <li><a class="dropdown-item fw-light" >No new notifications</a></li>
+                                  {% endfor %}
+                                  
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item fw-light" href="{% url 'dpapp:notifications' %}"><i class="fas fa-eye"></i>&nbsp; See all notifications</a></li>
+                                </ul>
+                              </div>
+
+                            
+                            
                         </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        
 
                         <li class="nav-item dropdown">
                             <a class="
@@ -91,14 +121,17 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'dpapp:profile' %}"><i class="fas fa-address-card"></i>&nbsp; Profile</a>
+                                    <a class="dropdown-item" href="{% url 'dpapp:profile' %}"><i
+                                            class="fas fa-address-card"></i>&nbsp; Profile</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'dpapp:adddoubt' %}"> <i class="fas fa-plus-square"></i>&nbsp; Post a doubt</a>
+                                    <a class="dropdown-item" href="{% url 'dpapp:adddoubt' %}">
+                                        <i class="fas fa-plus-square"></i>&nbsp; Post a doubt</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" onclick="return confirm('Are you sure to sign out?')"
-                                        href="{% url 'accounts:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out</a>
+                                        href="{% url 'accounts:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp;
+                                        Sign Out</a>
                                 </li>
                             </ul>
                         </li>
@@ -111,13 +144,11 @@
             const currentTheme = localStorage.getItem("theme");
             if (currentTheme == "dark") {
                 document.body.classList.toggle("dark-theme");
-                document.querySelector("#themetext").innerHTML="Bright Light";
-                
+                document.querySelector("#themetext").innerHTML = "Bright Light";
             } else if (currentTheme == "light") {
                 document.body.classList.toggle("light-theme");
-                document.querySelector("#themetext").innerHTML="Soft Light";
+                document.querySelector("#themetext").innerHTML = "Soft Light";
             }
-         
 
             document.querySelector(".stheme").addEventListener("click", () => {
                 var texty = document.querySelector("#themetext");
@@ -126,16 +157,14 @@
                 if (texty.innerHTML == "Soft Light") {
                     element.classList.remove("light-theme");
                     element.classList.add("dark-theme");
-                  texty.innerHTML = "Bright Light";
-                  var theme = 'dark';
-
-                    
-               } else if (texty.innerHTML == "Bright Light") {
-                     element.classList.remove("dark-theme");
-                     element.classList.add("light-theme");
+                    texty.innerHTML = "Bright Light";
+                    var theme = "dark";
+                } else if (texty.innerHTML == "Bright Light") {
+                    element.classList.remove("dark-theme");
+                    element.classList.add("light-theme");
                     texty.innerHTML = "Soft Light";
-                    var theme = 'light';
-               }
+                    var theme = "light";
+                }
                 localStorage.setItem("theme", theme);
             });
         </script>
@@ -146,6 +175,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
             crossorigin="anonymous"></script>
+
+
+        <script src="{% static 'dpapp/downhover/js/bootstrap-dropdownhover.min.js'%}"></script>
 
         {% block navbar %} {% endblock %}
     </body>
