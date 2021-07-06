@@ -1,75 +1,153 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta charset="utf-8">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- dark light mode -->
+        <!-- <meta name="color-scheme" content="dark light" /> -->
+
+        <meta charset="utf-8" />
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+            crossorigin="anonymous" />
+        <title>{% block title%}{% endblock title%}| doubtPinch</title>
+        <style>
+            .bg-purple {
+                background-color: #8364b2 !important;
+            }
+
+            .text-pinch {
+                color: #4d5198;
+            }
+
+            .btn-doubt {
+                background-color: #d1eff2;
+            }
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <title>{% block title%}{% endblock title%}| doubtPinch</title>
-    <style>
-        .bg-purple {
-            background-color: #8364b2 !important;
-        }
+            .dark-theme{
+                background-color: #f1f3f7;
+                
+              
+                transition: all 1s ease-out;
+            }
+            .light-theme{
+                background-color: rgb(255, 255, 255);
+                color: rgb(26, 25, 25);
+              
+                transition: all 1s ease-out;
 
-        .text-pinch {
-            color: #4D5198;
-        }
+            }
+        </style>
+    </head>
 
-        .btn-doubt {
-            background-color: #D1EFF2;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'dpapp:home'%}">
-                <img src="{% static 'accounts/pics/logo.png' %}" alt="" width="190" height="80">
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <div data-tilt>
+                    <a class="navbar-brand" href="{% url 'dpapp:home'%}">
+                        <img src="{% static 'accounts/pics/logo.png' %}" alt="" width="190" height="80" />
+                    </a>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item me-2">
+                            <a class="nav-link active fs-5" aria-current="page" href="#"><i
+                                    class="fas fa-bell"></i><span class="badge rounded-pill bg-danger" style="
+                    font-size: 10px;
+                    position: relative;
+                    top: -12px;
+                    left: -2px;
+                  ">11</span>
+                            </a>
+                        </li>
 
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ms-auto ">
-                    <li class="nav-item me-2">
-                        <a class="nav-link active fs-5" aria-current="page" href="#"><i
-                                class="fas fa-bell"></i><span class="badge rounded-pill bg-danger "
-                                style="font-size: 10px; position:relative; top:-12px; left:-2px">11</span> </a>
-                    </li>
-
-                    <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle border rounded-pill border-2 p-2" href="#"
-                            id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="far fa-user-circle fs-5"></i> {{user.first_name}}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="{% url 'dpapp:profile' %}">Profile</a></li>
-                            <li><a class="dropdown-item" href="{% url 'dpapp:adddoubt' %}">Post a doubt</a></li>
-                            <li><a class="dropdown-item" onclick="return confirm('Are you sure to sign out?')" href="{% url 'accounts:logout' %}">Sign Out</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                        <li class="nav-item dropdown">
+                            <a class="
+                  nav-link
+                  dropdown-toggle
+                  border
+                  rounded-pill
+                  border-2
+                  p-2
+                " href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="far fa-user-circle fs-5"></i> {{user.first_name}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item">
+                                        <div class="stheme">
+                                            <span id="themetext" style="cursor: pointer">Soft Light</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'dpapp:profile' %}"><i class="fas fa-address-card"></i>&nbsp; Profile</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'dpapp:adddoubt' %}"> <i class="fas fa-plus-square"></i>&nbsp; Post a doubt</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" onclick="return confirm('Are you sure to sign out?')"
+                                        href="{% url 'accounts:logout' %}"><i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
+        <script>
+            const currentTheme = localStorage.getItem("theme");
+            if (currentTheme == "dark") {
+                document.body.classList.toggle("dark-theme");
+                document.querySelector("#themetext").innerHTML="Bright Light";
+                
+            } else if (currentTheme == "light") {
+                document.body.classList.toggle("light-theme");
+                document.querySelector("#themetext").innerHTML="Soft Light";
+            }
+         
 
-    <script src="https://kit.fontawesome.com/60f8143899.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
+            document.querySelector(".stheme").addEventListener("click", () => {
+                var texty = document.querySelector("#themetext");
+                var element = document.body;
 
-    {% block navbar %}
-    {% endblock %}
-</body>
+                if (texty.innerHTML == "Soft Light") {
+                    element.classList.remove("light-theme");
+                    element.classList.add("dark-theme");
+                  texty.innerHTML = "Bright Light";
+                  var theme = 'dark';
+
+                    
+               } else if (texty.innerHTML == "Bright Light") {
+                     element.classList.remove("dark-theme");
+                     element.classList.add("light-theme");
+                    texty.innerHTML = "Soft Light";
+                    var theme = 'light';
+               }
+                localStorage.setItem("theme", theme);
+            });
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+
+        <script src="https://kit.fontawesome.com/60f8143899.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+
+        {% block navbar %} {% endblock %}
+    </body>
+
 </html>

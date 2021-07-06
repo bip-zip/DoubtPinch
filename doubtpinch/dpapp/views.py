@@ -87,7 +87,10 @@ class Detail(TemplateView):
 
 
   
-    
+
+
+from itertools import chain
+from operator import attrgetter
 class Profile(TemplateView):
     template_name="dpapp/profile.html"
 
@@ -96,8 +99,27 @@ class Profile(TemplateView):
         user=self.request.user
         useremail=user.email
         user=User.objects.get(email=useremail)
+        total_replies=Answer.objects.filter(user=user).count()
+        total_upvotes=RightPoint.total_upvotes_of_answerer(self,user)
+
+        qs1 = Doubt.objects.filter(user=user) #your first qs
+        qs2 = Answer.objects.filter(user=user) #your second qs
+        
+        recent_activity = sorted(chain(qs1,qs2),key=attrgetter('created_on'),)
+
+        paginator= Paginator(recent_activity, 2)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            recent_activity = paginator.page(page)
+        except PageNotAnInteger:
+            recent_activity = paginator.page(1)
+        except EmptyPage:
+            recent_activity = paginator.page(paginator.num_pages)
+
         form= ProfileForm(instance=user)
-        context.update({ 'form':form})
+        context.update({ 'form':form,'recent_activity':recent_activity,'total_upvotes':total_upvotes,'total_replies':total_replies})
         return context
 
     def post(self, request, **kwargs):

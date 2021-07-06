@@ -56,6 +56,14 @@ class RightPoint(models.Model):
 
     def __str__(self):
         return self.user.first_name
+    
+    @staticmethod
+    def total_upvotes_of_answerer(self,user):
+        answer=Answer.objects.filter(user=user)
+        upvotes=RightPoint.objects.filter(answer__in=answer).count()
+        return upvotes
+
+
 
 class WrongPoint(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE, related_name='wp')
