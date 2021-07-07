@@ -5,8 +5,8 @@ def navbar(request):
         user=request.user
         notifications = Notification.objects.filter(user=user).order_by('-id')[:5]
         noti_count = Notification.objects.filter(user=user, is_seen=False).count()
-        return {'notifications': notifications,'noti_count':noti_count}
-    return {'notifications': '0','noti_count':0}
+        return {'nav_notifications': notifications,'noti_count':noti_count}
+    return {'nav_notifications': '0','noti_count':0}
     
 
 

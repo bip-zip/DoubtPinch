@@ -70,7 +70,7 @@
 
                             <div class="dropdown ">
                                 <a class="nav-link active fs-5 dropdown-toggle" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" aria-current="page" href="#"><i
-                                    class="fas fa-bell"></i><span class="badge rounded-pill bg-danger" style="
+                                    class="fas fa-bell"></i><span class="badge rounded-pill bg-danger noti-count" style="
                     font-size: 10px;
                     position: relative;
                     top: -12px;
@@ -78,11 +78,21 @@
                   ">{{noti_count}}</span> Notifications
                             </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    {% for i in notifications%}
+                                    {% for i in nav_notifications%}
                                     {% if i.doubt == null %}
-                                        <li><a class="dropdown-item fw-light " href="{% url 'dpapp:comment' i.answer.id %}"><i class="fas fa-comments"></i>&nbsp {{i.text_preview}} <i class="text-primary" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                        {% if i.is_seen %}
+                                        <li><a class="dropdown-item fw-light seen-click" data-nid={{i.id}} href="{% url 'dpapp:comment' i.answer.id %}"><i class="fas fa-comments"></i>&nbsp {{i.text_preview}} <i class="text-primary" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                        {%else%}
+                                        <li><a class="dropdown-item fw-light seen-click bg-light text-white" data-nid={{i.id}} href="{% url 'dpapp:comment' i.answer.id %}"><i class="fas fa-comments"></i>&nbsp {{i.text_preview}} <i class="text-light" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                        {%endif%}
                                     {% elif i.answer == null %}
-                                        <li><a class="dropdown-item fw-light " href="{% url 'dpapp:detail' i.doubt.id %}"><i class="fas fa-question-circle"></i>&nbsp {{i.text_preview}} <i class="text-primary" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                    {% if i.is_seen %}
+                                        <li><a class="dropdown-item fw-light seen-click" data-nid={{i.id}} href="{% url 'dpapp:detail' i.doubt.id %}"><i class="fas fa-question-circle"></i>&nbsp {{i.text_preview}} <i class="text-primary" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                        {%else%}
+                                        <li><a class="dropdown-item fw-light seen-click bg-secondary text-white" data-nid={{i.id}} href="{% url 'dpapp:detail' i.doubt.id %}"><i class="fas fa-question-circle"></i>&nbsp {{i.text_preview}} <i class="text-light" style="font-size: 0.8em;">({{i.date|naturaltime}})</i></a></li>
+                                        
+                                        {%endif%}
+
 
                                     {% endif %}
                                   {% empty %}
@@ -140,6 +150,8 @@
             </div>
         </nav>
 
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
             const currentTheme = localStorage.getItem("theme");
             if (currentTheme == "dark") {
@@ -167,8 +179,37 @@
                 }
                 localStorage.setItem("theme", theme);
             });
+            //AJAX
+            $('.seen-click').on('click', function () {
+                var noti_id = $(this).data('nid');
+                console.log(noti_id);
+
+                $.ajax({
+                    url: "{% url 'dpapp:notification_seen' %}",
+                    type: 'post',
+                    data: {
+                        notification_id: noti_id,
+                        csrfmiddlewaretoken: "{{csrf_token}}"
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+        
+                        if (res.bool == true) {
+                            $(".noti-count").text(res.notificationCount);
+                        }
+        
+        
+                    }
+                });
+        
+        
+        
+                
+        
+            })
+
+            
         </script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
 
         <script src="https://kit.fontawesome.com/60f8143899.js" crossorigin="anonymous"></script>

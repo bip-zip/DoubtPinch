@@ -17,7 +17,7 @@
     <!-- Body -->
     <div class="row mt-3 ">
         <div class="col border shadow-sm p-3 mx-3 mb-3">
-            <p class="fw-light fs-4 text-center">Notifications </p>
+            <p class="fw-light fs-4 text-center position-relative "><span class="noti-count">{{noti_count}}</span> unseen Notifications  </p>
          
 
             <div class="mt-1">
@@ -29,22 +29,35 @@
                     <li class="list-group-item d-flex align-items-center ">
                         
                         <div class="me-4">
-                            <img alt="40x40" height="50" width="50" class="img-fluid" src="{{i.sender.ProfilePicUrl}}"
+                            <img alt="40x40" height="50" width="50" class="rounded-circle shadow" src="{{i.sender.ProfilePicUrl}}"
                                 data-holder-rendered="true">
                         </div>
                         {% if i.doubt == null %}
+                        {% if i.is_seen %}
+                        <div class="me-2"><a class="text-decoration-none fw-light text-dark seen-click" data-nid={{i.id}} href="{% url 'dpapp:comment' i.answer.id %}">{{i.sender.first_name}} {{i.sender.last_name}} has commented on the answer you replied.</a> </div>
 
-                        <div class="me-2"><a class="text-decoration-none fw-light" href="{% url 'dpapp:comment' i.answer.id %}">{{i.sender.first_name}} {{i.sender.last_name}} commented to your the answer you replied.</a> </div><i class="fw-light" style="font-size: 0.8em;">({{i.date}})</i> 
+                        {%else%}
+                        <div class="me-2 "><a class="text-decoration-none  seen-click " data-nid={{i.id}} href="{% url 'dpapp:comment' i.answer.id %}">{{i.sender.first_name}} {{i.sender.last_name}} has commented on the answer you replied.</a> </div>
+
+                        {%endif%}
+
                         {% elif i.answer == null %}
-                        <div class="me-2"><a class="text-decoration-none fw-light" href="{% url 'dpapp:detail' i.doubt.id %}">{{i.sender.first_name}} {{i.sender.last_name}} has replied his solution to your doubt. </a> </div><i class="fw-light" style="font-size: 0.8em;">({{i.date}})</i> 
+                        {% if i.is_seen %}
+                        <div class="me-2"><a class="text-decoration-none fw-light text-dark seen-click" data-nid={{i.id}} href="{% url 'dpapp:detail' i.doubt.id %}">{{i.sender.first_name}} {{i.sender.last_name}} has replied his solution to your doubt. </a> </div>
+                        {%else%}
+                        <div class="me-2 "><a class="text-decoration-none  seen-click " data-nid={{i.id}} href="{% url 'dpapp:detail' i.doubt.id %}">{{i.sender.first_name}} {{i.sender.last_name}} has replied his solution to your doubt. </a> </div>
+
+                        {%endif%}
+
+
                         {% endif %}
                         <div class="ms-auto" >
-                            <input class="custom-control-input" type="checkbox" style="cursor: pointer;" value="" id="defaultCheck{{i.id}}" >
-                            <small class="fw-light" style="font-size: 0.8em;"  >Marked as seen</small>
+                            <i class="fw-light text-pinch" style="font-size: 0.8em;">({{i.date}})</i>
+                            
                         </div>
                     </li>
                     {% empty %}
-                    <h3 class="text-centr">No notifications.</h3>
+                    <h3 class="text-center">No notifications.</h3>
                     {% endfor %}
 
                     
@@ -80,5 +93,30 @@
     <!-- Footer -->
    
 </div>
+<script>
+    $('.seen-click').on('click', function () {
+        var noti_id = $(this).data('nid');
+        console.log(noti_id);
+
+        $.ajax({
+            url: "{% url 'dpapp:notification_seen' %}",
+            type: 'post',
+            data: {
+                notification_id: noti_id,
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            dataType: 'json',
+            success: function (res) {
+
+                if (res.bool == true) {
+                    $(".noti-count").text(res.notificationCount);
+                }
+
+
+            }
+        });
+    })
+
+</script>
 
 {% endblock %}

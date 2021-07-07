@@ -297,9 +297,11 @@ class NotificationView(TemplateView):
         context = super(NotificationView, self).get_context_data(**kwargs) 
         user=self.request.user
         notifications = Notification.objects.filter(user=user).order_by('-id')
+        noti_count = Notification.objects.filter(user=user, is_seen=False).count()
+
         
         
-        paginator= Paginator(notifications, 2)
+        paginator= Paginator(notifications, 15)
         page = self.request.GET.get('page')
         # blogs_final= paginator.get_page(page_number)
 
@@ -310,5 +312,22 @@ class NotificationView(TemplateView):
         except EmptyPage:
             notifications = paginator.page(paginator.num_pages)
 
-        context.update({'notifications': notifications,'page':page})
+        context.update({'notifications': notifications,'noti_count':noti_count,'page':page})
         return context
+
+
+
+def notification_seen(request):
+    if request.method == "POST":
+        notification_id=request.POST['notification_id']
+        notification=Notification.objects.get(id=notification_id)
+        user=request.user
+        if notification.is_seen == True:
+            notificationCount= Notification.objects.filter(user=user, is_seen=False).count()
+            return JsonResponse({'bool':True,'notificationCount':notificationCount})
+
+        notification.is_seen=True
+        notification.save()
+        notificationCount= Notification.objects.filter(user=user, is_seen=False).count()
+        
+        return JsonResponse({'bool':True,'notificationCount':notificationCount})

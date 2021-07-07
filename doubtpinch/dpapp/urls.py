@@ -17,5 +17,7 @@ urlpatterns=[
     path('search/',Search.as_view(),name='search'),
     path('comment/<int:id>',CommentView.as_view(),name='comment'),
     path('notifications/',NotificationView.as_view(),name='notifications'),
+    path('notification_seen/',notification_seen,name='notification_seen'),
+
   
 ]

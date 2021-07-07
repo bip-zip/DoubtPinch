@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Doubt, Answer,RightPoint,WrongPoint,Notification
+from .models import Doubt, Answer,RightPoint,WrongPoint,Notification,Comment
 
 # Apply summernote to all TextField in model.
 class DoubtAdmin(SummernoteModelAdmin):  # instead of ModelAdmin
@@ -27,4 +27,5 @@ admin.site.register(Answer, AnswerAdmin)
 admin.site.register(RightPoint)
 admin.site.register(WrongPoint)
 admin.site.register(Notification)
+admin.site.register(Comment)
 
