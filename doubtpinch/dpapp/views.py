@@ -151,6 +151,7 @@ class PostDoubtView(CreateView):
         user= self.request.user
         self.object.user=user
         self.object.save()
+        form.save_m2m()
 
         return redirect('dpapp:profile')
 
@@ -235,8 +236,8 @@ class Search(TemplateView):
         context = super(Search, self).get_context_data(**kwargs) 
         query = self.request.GET['query']
         
-        doubts=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__icontains=query)).distinct()
-        counted=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__icontains=query)).distinct().count()
+        doubts=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__name__icontains=query)).distinct()
+        counted=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__name__icontains=query)).distinct().count()
        
         paginator= Paginator(doubts,2)
         page = self.request.GET.get('page')
@@ -331,3 +332,28 @@ def notification_seen(request):
         notificationCount= Notification.objects.filter(user=user, is_seen=False).count()
         
         return JsonResponse({'bool':True,'notificationCount':notificationCount})
+
+
+class TagsView(TemplateView):
+    template_name="dpapp/tags.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(TagsView, self).get_context_data(**kwargs) 
+        
+        doubts=Doubt.objects.filter(tags__slug=self.kwargs.get('slug'))
+        counted=Doubt.objects.filter(tags__slug=self.kwargs.get('slug')).count()
+
+       
+       
+        paginator= Paginator(doubts,2)
+        page = self.request.GET.get('page')
+        # blogs_final= paginator.get_page(page_number)
+
+        try:
+            doubts = paginator.page(page)
+        except PageNotAnInteger:
+            doubts = paginator.page(1)
+        except EmptyPage:
+            doubts = paginator.page(paginator.num_pages)
+        context.update({'counted':counted,'doubts':doubts, 'page':page})
+        return context

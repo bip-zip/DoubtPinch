@@ -1,7 +1,7 @@
 
 {% extends 'dpapp/base.html' %}
 {% load static %}
-<!-- {% load sass_tags %} -->
+
         <title>{% block title%}Home {% endblock title%}</title>
         {% block navbar%}
         <link rel="stylesheet" href="{% static 'dpapp/css/paginate.css' %}">
@@ -24,9 +24,10 @@
                         <div class="bg-light mt-2 p-3 rounded-3  ">
                             <p class="h6 text-dark mb-3">{{i.title}}</p>
 
-                            <span class="badge rounded-pill bg-purple fw-normal">Python</span>
-                            <span class="badge rounded-pill  bg-purple fw-normal">Neo4j</span>
-                            <span class="badge rounded-pill  bg-purple fw-normal">GraphDB</span>
+                            {% for tag in i.tags.all %}
+                            <a href="{% url 'dpapp:tags' tag.slug %}"><span class="badge rounded-pill bg-purple fw-normal">{{tag.name}}</span></a>
+                            {%endfor%}
+                          
                         </div>
 
                         <div class="d-flex bd-highlight mb-3">

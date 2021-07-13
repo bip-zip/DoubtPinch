@@ -2,33 +2,28 @@
 {% extends 'dpapp/base.html' %}
 {% load static %}
 
-        <title>{% block title%}Search {% endblock title%}</title>
+        <title>{% block title%}Tags {% endblock title%}</title>
         {% block navbar%}
         <link rel="stylesheet" href="{% static 'dpapp/css/paginate.css' %}">
 
         <div class="container">
             <!-- Searchbar -->
-            <form class="d-flex mt-3" method="GET" action="/app/search">
+            <!-- <form class="d-flex mt-3" method="GET" action="/app/search">
                 <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search doubts" name="query" 
                     aria-label="Search">
                 <button class="btn btn-info text-light fw-bold" type="submit">Search</button>
-            </form>
+            </form> -->
             <!-- End of search bar -->
             <!-- Body -->
             <div class="row mt-3 ">
                 <div class="col border shadow-sm p-3 mx-3 mb-3">
-                    <p class="fw-light fs-4 text-center">{{counted}} Search results:</p>
+                    <p class="fw-light fs-4 text-center">{{counted}} related tag results:</p>
                     {% for i in doubts %}
 
                     <div class="mt-1">
                         <div class="bg-light mt-2 p-3 rounded-3  ">
                             <a href="{% url 'dpapp:detail' i.id %}" class="text-decoration-none">
-                            
                             <p class="h6 text-dark mb-3">{{i.title}}</p>
-
-                           
-                            
-
                             <small class="text-muted">Posted by: <span class="fs-6 text-pinch">{{i.user.first_name}} {{i.user.last_name}}</span></small><br>
                             <small class="text-muted">{{i.created_on}} | {{i.total_replies}} replies | {{i.views}} views</span></small>
                             </a>

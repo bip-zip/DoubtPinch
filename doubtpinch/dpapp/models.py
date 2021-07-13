@@ -2,14 +2,16 @@ from django.db import models
 from accounts.models import User
 from datetime import datetime
 
+from taggit.managers import TaggableManager
+
 
 class Doubt(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE)
     title= models.TextField(null=False)
     description=models.TextField(null=True, blank=True)
     created_on = models.DateTimeField(default=datetime.now, blank=True)
-    tags=models.CharField(max_length=255, null=True)
     views= models.IntegerField(default=0)
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title

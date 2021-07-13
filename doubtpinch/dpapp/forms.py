@@ -4,6 +4,7 @@ from accounts.models import User
 
 from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
 from django.forms import Textarea
+from taggit.forms import *
 
 class DoubtForm(forms.ModelForm):
     # password1 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)

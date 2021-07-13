@@ -25,6 +25,9 @@
                     <span class="fs-6 text-pinch">{{doubt.user.first_name}} {{doubt.user.last_name}} |
                         {{doubt.created_on}}</span>
                     <p class="h5 text-dark mt-2 mb-3">{{doubt.title}}</p>
+                    {% for tag in doubt.tags.all %}
+                            <a href="{% url 'dpapp:tags' tag.slug %}"><span class="badge rounded-pill bg-purple fw-normal">{{tag.name}}</span></a>
+                            {%endfor%}
                     {% if doubt.description != '' %}
                     <hr>
                     <div>

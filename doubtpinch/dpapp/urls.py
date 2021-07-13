@@ -18,6 +18,7 @@ urlpatterns=[
     path('comment/<int:id>',CommentView.as_view(),name='comment'),
     path('notifications/',NotificationView.as_view(),name='notifications'),
     path('notification_seen/',notification_seen,name='notification_seen'),
+    path('tags/<slug>',TagsView.as_view(),name='tags')
 
   
 ]
