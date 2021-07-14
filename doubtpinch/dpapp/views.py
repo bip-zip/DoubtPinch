@@ -342,6 +342,7 @@ class TagsView(TemplateView):
         
         doubts=Doubt.objects.filter(tags__slug=self.kwargs.get('slug'))
         counted=Doubt.objects.filter(tags__slug=self.kwargs.get('slug')).count()
+        tagname=self.kwargs.get('slug')
 
        
        
@@ -355,5 +356,5 @@ class TagsView(TemplateView):
             doubts = paginator.page(1)
         except EmptyPage:
             doubts = paginator.page(paginator.num_pages)
-        context.update({'counted':counted,'doubts':doubts, 'page':page})
+        context.update({'counted':counted,'doubts':doubts, 'page':page, 'tagname':tagname})
         return context
