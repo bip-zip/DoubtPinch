@@ -4,6 +4,7 @@ from django.urls import path,include
 from .views import UserSignin,ActivateAccount
 from django.contrib.auth.views import LogoutView, LoginView
 
+
 app_name='accounts'
 
 urlpatterns=[
@@ -15,5 +16,9 @@ urlpatterns=[
     path('sent/', activation_sent_view, name='sent'),
     path('invalid',activation_invalid_view, name='invalid'),
     path('validate_username', validate_user, name='validate_user'),
+
+    path("password_reset", PasswordReset.as_view(), name="password_reset")      
+
+    
 
 ]
