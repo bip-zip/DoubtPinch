@@ -142,7 +142,7 @@ class PasswordReset(View):
         password_reset_form = PasswordResetForm(request.POST)
         if password_reset_form.is_valid():
             data = password_reset_form.cleaned_data['email']
-            associated_users = User.objects.filter(Q(email=data))
+            associated_users = User.objects.filter(email=data)
             if associated_users.exists():
                 for user in associated_users:
                     subject = "Password Reset Requested"
@@ -162,4 +162,8 @@ class PasswordReset(View):
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect ("/password_reset/done/")
+            messages.error(request, 'No account was registered with this email.')
+            return redirect('accounts:password_reset')
+            
+            
         
