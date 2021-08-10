@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView
-from .models import Doubt, Answer, RightPoint, WrongPoint, Comment,Notification
+from .models import Doubt, Answer, RightPoint, WrongPoint, Comment,Notification,TaggableManager
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .forms import DoubtForm, AnswerForm, CommentForm, ProfileForm
 from django.core.paginator import Paginator
@@ -22,7 +22,7 @@ class Home(ListView):
         # order by max comments for a certain timestamp
 
         newdoubts=Doubt.objects.all().order_by('-id')
-        paginator= Paginator(doubts, 2)
+        paginator= Paginator(doubts, 10)
         page = self.request.GET.get('page')
         # blogs_final= paginator.get_page(page_number)
 
@@ -47,6 +47,11 @@ class Detail(TemplateView):
         doubt.views = doubt.views + 1
         doubt.save()
         answers= Answer.objects.filter(doubt=doubt)
+        tags = doubt.tags.all()
+        print(tags)
+        # posts = Post.objects.filter(tags__name__in=tags)
+        related_question=Doubt.objects.filter(tags__in=tags).exclude(id=(doubt.id))[:15]
+        # posts = Post.objects.filter(tags__name__in=["Lorem"])
         
         paginator= Paginator(answers, 2)
         page = self.request.GET.get('page')
@@ -58,7 +63,7 @@ class Detail(TemplateView):
             answers = paginator.page(1)
         except EmptyPage:
             answers = paginator.page(paginator.num_pages)
-        context.update({'doubt':doubt,'answers':answers, 'form':AnswerForm, 'page':page})
+        context.update({'doubt':doubt,'answers':answers, 'form':AnswerForm, 'page':page,'related_question':related_question})
         return context
 
     def post(self, request, **kwargs):

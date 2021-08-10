@@ -1,4 +1,3 @@
-
 {% extends 'dpapp/base.html' %}
 {% load static %}
 
@@ -23,7 +22,7 @@
                     <div class="mt-1">
                         <div class="bg-light mt-2 p-3 rounded-3  ">
                             <p class="h6 text-dark mb-3">{{i.title}}</p>
-
+                            
                             {% for tag in i.tags.all %}
                             <a href="{% url 'dpapp:tags' tag.slug %}"><span class="badge rounded-pill bg-purple fw-normal">{{tag.name}}</span></a>
                             {%endfor%}

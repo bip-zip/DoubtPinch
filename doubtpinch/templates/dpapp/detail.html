@@ -71,9 +71,12 @@
 
 
                 {% for i in answers%}
-                <div class="border p-3 my-2">
+                <div class="border rounded-3 p-3 my-2">
                     <span class="fs-6 fw-bold"> <i class="fas fa-user-circle"></i> &nbsp;{{i.user.first_name}}
                         {{i.user.last_name}} <i class="fw-normal text-pinch">({{i.created_on}})</i></span>
+                        {% if i.user == request.user %}
+                            <a href="">update</a>
+                        {%endif%}
                     <div class="my-2 mx-4" style="text-align: justify;">
                         {{i.description|safe}}
                     </div>
@@ -116,28 +119,15 @@
     
         <div class="col-lg-3 col-11 border shadow-sm mx-3 py-3 px-4 mb-3">
             <p class="fw-light fs-6 text-center">Related Questions</p>
+            {% for i in related_question %}
 
-            <a href="" class="text-pinch text-decoration-none fs-6">
-                <p>How to start usability testing of a physical product? </p>
+            <a href="{% url 'dpapp:detail' i.id %}" class="text-pinch text-decoration-none fs-6">
+                <p>{{i.title}}</p>
             </a>
-            <!-- Repeatating -->
-            <a href="" class="text-pinch text-decoration-none fs-6">
-                <p>How to start usability testing of a physical product? </p>
-            </a>
-            <a href="" class="text-pinch text-decoration-none fs-6">
-                <p>How to start usability testing of a physical product? </p>
-            </a>
-            <a href="" class="text-pinch text-decoration-none fs-6">
-                <p>How to start usability testing of a physical product? </p>
-            </a>
-            <a href="" class="text-pinch text-decoration-none fs-6">
-                <p>How to start usability testing of a physical product? </p>
-            </a>
-            <a href="" class="text-pinch text-decoration-none fs-6">
-                <p>How to start usability testing of a physical product? </p>
-            </a>
-            <!-- End repetating -->
-
+            {%empty%}
+            <p class="text-center"> No related questions found.</p>
+           
+            {% endfor %}
 
 
         </div>

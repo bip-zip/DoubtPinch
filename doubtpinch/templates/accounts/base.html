@@ -37,6 +37,21 @@
         <!-- end of Navbar -->
         {% block navblock%}
         {% endblock %}
+        {% block navbar %} {% endblock %}
+        
+        <footer class="text-center text-white  mt-3" style="background-color: #f1ecf0;">
+            <!-- Grid container -->
+            <div class="container p-4"></div>
+            <!-- Grid container -->
+          
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+              © 2021 Copyright:
+              <a class="text-white" href="#">CodeCharm Nepal</a>
+            </div>
+            <!-- Copyright -->
+          </footer>
+          {% block footer %}{% endblock %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
