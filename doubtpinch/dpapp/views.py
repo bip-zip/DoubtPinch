@@ -7,12 +7,16 @@ from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from accounts.models import User
+# from .documents import DoubtDocument
+# from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
-
+@method_decorator(login_required, name='dispatch')
 class Home(ListView):
     template_name="dpapp/home.html"
     model= Doubt
-
+    
     def get_context_data(self, **kwargs):
         context = super(Home, self).get_context_data(**kwargs) 
         doubts=Doubt.objects.all().order_by('-views')
@@ -36,7 +40,7 @@ class Home(ListView):
         context.update({'doubts':doubts,'newdoubts':newdoubts,'page':page})
         return context
 
-
+@method_decorator(login_required, name='dispatch')
 class Detail(TemplateView):
     template_name="dpapp/detail.html"
 
@@ -96,6 +100,8 @@ class Detail(TemplateView):
 
 from itertools import chain
 from operator import attrgetter
+
+@method_decorator(login_required, name='dispatch')
 class Profile(TemplateView):
     template_name="dpapp/profile.html"
 
@@ -144,7 +150,7 @@ class Profile(TemplateView):
         return HttpResponseRedirect(self.request.path_info)
     
         
-        
+@method_decorator(login_required, name='dispatch')
 class PostDoubtView(CreateView):
     model = Doubt
     template_name = "dpapp/addDoubt.html"
@@ -234,6 +240,7 @@ def saveWPoint(request):
 
 
 from django.db.models import Q
+@method_decorator(login_required, name='dispatch')
 class Search(TemplateView):
     template_name="dpapp/search.html"
 
@@ -241,8 +248,13 @@ class Search(TemplateView):
         context = super(Search, self).get_context_data(**kwargs) 
         query = self.request.GET['query']
         
+
+        # s_doubts=DoubtDocument.search().filter("term",title=query_)[:30]
+        # doubts=s_doubts.to_queryset()
         doubts=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__name__icontains=query)).distinct()
-        counted=Doubt.objects.filter(Q(title__icontains=query) | Q(description__icontains=query)| Q(tags__name__icontains=query)).distinct().count()
+        counted=doubts.count()
+       
+
        
         paginator= Paginator(doubts,2)
         page = self.request.GET.get('page')
@@ -255,10 +267,12 @@ class Search(TemplateView):
         except EmptyPage:
             doubts = paginator.page(paginator.num_pages)
         context.update({'counted':counted,'doubts':doubts, 'form':AnswerForm, 'page':page})
+        # context.update({'counted':counted,'doubts':doubts, 'form':AnswerForm})
+
         return context
 
    
-        
+@method_decorator(login_required, name='dispatch')
 class CommentView(TemplateView):
     template_name="dpapp/comments.html"
 
@@ -295,6 +309,7 @@ class CommentView(TemplateView):
             return HttpResponseRedirect(self.request.path_info)
         return HttpResponseRedirect(self.request.path_info)
 
+@method_decorator(login_required, name='dispatch')
 class NotificationView(TemplateView):
     template_name= 'dpapp/notifications.html'
 
@@ -338,7 +353,7 @@ def notification_seen(request):
         
         return JsonResponse({'bool':True,'notificationCount':notificationCount})
 
-
+@method_decorator(login_required, name='dispatch')
 class TagsView(TemplateView):
     template_name="dpapp/tags.html"
 
@@ -363,3 +378,11 @@ class TagsView(TemplateView):
             doubts = paginator.page(paginator.num_pages)
         context.update({'counted':counted,'doubts':doubts, 'page':page, 'tagname':tagname})
         return context
+
+
+
+
+# export ES_JAVA_OPTS="-Xms256m -Xmx256m"
+
+
+# python3 manage.py search_index --rebuild

@@ -49,10 +49,14 @@ INSTALLED_APPS = [
     'django_summernote',
     'dpapp',
     'taggit',
-   
-  
+    # 'django_elasticsearch_dsl'
 
 ]
+ELASTICSEARCH_DSL = {
+    'default':{
+        'hosts':'localhost:9200'
+    },
+}
 
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
@@ -129,6 +133,7 @@ AUTHENTICATION_BACKENDS = (
 )
 LOGIN_REDIRECT_URL = 'dpapp:home'
 LOGOUT_REDIRECT_URL = 'accounts:login'
+LOGIN_URL='accounts:login'
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
