@@ -48,12 +48,12 @@
                            
                             {% for i in answers.paginator.page_range %}
                             {% if i == answers.number%}
-                            <li class="page-item active me-1"><a class="page-link" href="#">{{i}}</a></li>
+                            <li class="page-item active   me-1"><a class="page-link bg-purple rounded-3  border-light" href="#">{{i}}</a></li>
                             {% else %}
                                 {% if 'heading_contains' in request.get_full_path %}  
-                                <li class="page-item me-1"><a class="page-link" href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>
+                                <li class="page-item rounded-3  me-1"><a class="page-link rounded-3 text-secondary" href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>
                                 {% else %}
-                                <li class="page-item me-1 "><a class="page-link"  href="?page={{ i }}">{{ i }}</a></li>
+                                <li class="page-item rounded-3  me-1 "><a class="page-link rounded-3 text-secondary"  href="?page={{ i }}">{{ i }}</a></li>
                                 {% endif %}
                             {% endif %}
                             {% endfor %}
