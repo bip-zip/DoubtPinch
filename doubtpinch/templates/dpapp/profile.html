@@ -129,17 +129,15 @@
             <p class="text-center text-pinch my-1">Replies: <span class="fw-bold"> {{total_replies}}</span></p>
             <p class="text-center text-pinch border rounded-3 p-2 my-1 col-lg-6 col-md-4 col-sm-4 col-4 mx-auto h5">APR
                 <span class="fw-bold text-success">89</span></p>
-                <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModal1"
-                style=" font-size: 15px;
-                    position: relative;
-                    top: 40px;
-                    left: 285px;">
-                <i class="fas fa-edit text-secondary"></i>
-            </button>
+              
 
-                <div class="border mx-2 p-4  rounded-3">
+                <div class="border mx-2 p-4 my-2  rounded-3">
+                    <button type="button" class="btn btn-white  float-end" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                            <i class="fas fa-edit text-secondary"></i>
+                    </button>
                    
-                    <h5 class="fw-light">About</h5>
+                    <h5 class="fw-light">About</h5><hr>
+                   
                     {% if request.user.description == Null %}
                     <p class="mt-2 text-secondary">Write about yourself.....
                     </p>
@@ -151,17 +149,17 @@
 
                 </div>
               
-                <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModal2"
-                style=" font-size: 15px;
-                    position: relative;
-                    top: 40px;
-                    left: 285px;">
-                <i class="fas fa-edit text-secondary"></i>
-            </button>
-                <div class="border  mx-2 p-4 rounded-3">
-                    <h5 class="fw-light">Skills</h5>
+               
+                <div class="border  mx-2 my-2 p-4 rounded-3">
+                    <button type="button" class="btn btn-white float-end" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                        <i class="fas fa-edit text-secondary"></i>
+                    </button>
+                    <h5 class="fw-light">Skills</h5><hr>
                     {% for i in userskill %}
-                    <p>{{i.skill.skill}} - {{i.level}}</p>
+                    <p class="fw-light"><b>{{i.skill.skill}}</b> - {{i.level}}</p>
+                    {%empty%}
+                    <p class="fw-light">Add your skills...</p>
+
                   {%endfor%}
                 </div>
             <div class="d-flex justify-content-center">
@@ -244,13 +242,13 @@
                     <div class="  col-lg-8 mx-auto my-2">
                         <div class="row">
                             <div class="col-lg-4 mx-2 border text-center">
-                                <p class="fw-light ">{{i.skill.skill}}</p>
+                                <span class="fw-light ">{{i.skill.skill}}</span>
                             </div>
                             <div class="col-lg-6  border text-center">
-                                <p class="fw-light">{{i.level}}</p>
+                                <span class="fw-light">{{i.level}}</span>
                             </div>
                             <div class="col lg 2">
-                                <a class="text-secondary" href=""><i class="fa fa-trash"></i></a>
+                                <a class="text-secondary" href="{% url 'accounts:remove_skill' i.id%}"><i class="fa fa-trash"></i></a>
                             </div>
                         </div>
                     </div>
@@ -260,9 +258,9 @@
                     <hr>
                     <form method="POST" action="{% url 'accounts:user_skill' %}">
                         {% csrf_token %}
-                    <div class="row col-lg-12 mx-auto"> 
+                    <div class="row col-lg-12 col-md-12 col-12 mx-auto"> 
                        
-                        <div class="col-md-6">
+                        <div class="col-lg-5 col-5 col-md-5">
                             <input list="skills" name="skill" placeholder="Choose Skill"required>
                             <datalist id="skills" id="" >
                                 {% for i in skill %}
@@ -270,7 +268,7 @@
                                 {%endfor%}
                             </datalist>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-4 col-4 col-md-4">
                             <select name="level" id="" required style="height: 30px;">
                                 <!-- <option value="">Choose level</option> -->
                                 <option value="Beginner">Beginner</option>
@@ -278,7 +276,7 @@
                                 <option value="Expert">Expert</option>
                             </select>
                          </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 col-3 col-md-3">
                         <button type="submit" class="btn btn-success btn-sm">Add</button>
                         </div>
                     </div>

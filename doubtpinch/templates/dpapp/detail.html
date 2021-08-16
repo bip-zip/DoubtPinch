@@ -75,7 +75,15 @@
                     <span class="fs-6 fw-bold"> <i class="fas fa-user-circle"></i> &nbsp;{{i.user.first_name}}
                         {{i.user.last_name}} <i class="fw-normal text-pinch">({{i.created_on}})</i></span>
                         {% if i.user == request.user %}
-                            <a href="">update</a>
+                        <div class="btn-group dropstart  float-end">
+                            <button type="button" class=" dropdown-toggle pull-right" data-bs-toggle="dropdown" aria-expanded="false">
+                             
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'dpapp:update_answer' i.id %}?next={{ request.path|urlencode }}">Edit</a></li>
+                                <li><a class="dropdown-item" href="{% url 'dpapp:delete_answer' i.id %}" onclick="return confirm('Are you sure to delete the answer?')">Delete</a></li>
+                            </ul>
+                          </div>
                         {%endif%}
                     <div class="my-2 mx-4" style="text-align: justify;">
                         {{i.description|safe}}

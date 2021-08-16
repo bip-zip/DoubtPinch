@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from .views import *
 from django.urls import path,include
-from .views import Home,Detail, Profile,PostDoubtView, Search, CommentView,NotificationView
+from .views import Home,Detail, Profile,PostDoubtView, Search, CommentView,NotificationView,UpdateAnswer
 
 
 app_name='dpapp'
@@ -18,7 +18,8 @@ urlpatterns=[
     path('comment/<int:id>',CommentView.as_view(),name='comment'),
     path('notifications/',NotificationView.as_view(),name='notifications'),
     path('notification_seen/',notification_seen,name='notification_seen'),
-    path('tags/<slug>',TagsView.as_view(),name='tags')
+    path('tags/<slug>',TagsView.as_view(),name='tags'),
+    path('update-answer/<pk>',UpdateAnswer.as_view(),name='update_answer'),
+    path('delete-answer/<id>',DeleteAnswer.as_view(),name='delete_answer'),
 
-  
 ]

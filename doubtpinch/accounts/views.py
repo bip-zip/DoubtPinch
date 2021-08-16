@@ -186,3 +186,11 @@ class SkillUser(View):
         skill=Skill.objects.get(skill=skill_id)
         UserSkill.objects.create(user=a_user, skill=skill, level=level )
         return redirect('dpapp:profile')
+
+class DeleteSkill(View):
+    def get(self,request,*args, **kwargs):
+        skill_id=self.kwargs['id']
+        UserSkill.objects.get(id=skill_id).delete()
+        return redirect('dpapp:profile')
+
+

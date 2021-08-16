@@ -1,0 +1,39 @@
+{% extends 'dpapp/base.html' %}
+{% load bootstrap %}
+<title>{% block title%}UpdateAnswer {% endblock title%}</title>
+{% block navbar%}
+
+
+
+
+
+<div class="container">
+   
+  
+        <div class="border shadow p-5 mx-1 mt-2 mb-3">
+
+            <h4 class="text-center fw-light">Update answer</h4>
+
+
+
+            <form method="post" enctype="multipart/form-data">
+                <hr>
+                {% csrf_token %}
+                {{form|bootstrap}}
+                
+                <div class="mt-4  d-flex justify-content-end">
+                        <a href="javascript:history.go(-1)" type="submit" class="btn btn-danger btn-sm col-2 me-2" onclick="return confirm('Want to cancel the post?')">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-sm col-3"  >Save changes</button>
+                </div>
+               
+            </form>
+    
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock%}

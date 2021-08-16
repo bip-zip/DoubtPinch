@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect
+from django.urls.base import reverse
+from django.urls.conf import re_path
 from django.views.generic import TemplateView, View, ListView, DetailView, CreateView
+from django.views.generic.edit import UpdateView
 from .models import Doubt, Answer, RightPoint, WrongPoint, Comment,Notification,TaggableManager
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from .forms import DoubtForm, AnswerForm, CommentForm, ProfileForm
@@ -119,7 +122,7 @@ class Profile(TemplateView):
         
         recent_activity = sorted(chain(qs1,qs2),key=attrgetter('created_on'),)
 
-        paginator= Paginator(recent_activity, 2)
+        paginator= Paginator(recent_activity, 3)
         page = self.request.GET.get('page')
         # blogs_final= paginator.get_page(page_number)
 
@@ -380,7 +383,21 @@ class TagsView(TemplateView):
         context.update({'counted':counted,'doubts':doubts, 'page':page, 'tagname':tagname})
         return context
 
+class UpdateAnswer(UpdateView):
+    form_class=AnswerForm
+    model=Answer
 
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        if next_url:
+            return next_url
+    
+class DeleteAnswer(View):
+    def get(self, request, **kwargs):
+        ansid=self.kwargs['id']
+        Answer.objects.get(id=ansid).delete()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
 
 # export ES_JAVA_OPTS="-Xms256m -Xmx256m"
 

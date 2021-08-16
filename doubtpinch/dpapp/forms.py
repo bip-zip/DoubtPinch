@@ -31,7 +31,7 @@ class AnswerForm(forms.ModelForm):
         fields = ('description',)
         widgets = {
             # 'description': SummernoteInplaceWidget()
-            'description': SummernoteWidget(attrs={'summernote': {'width': '100%', 'height': '100px', "placeholder": "Your Solution..."}}),
+            'description': SummernoteWidget(attrs={'summernote': {'width': '100%', 'height': '200px', "placeholder": "Your Solution..."}}),
         }
 
 

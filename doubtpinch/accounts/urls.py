@@ -20,6 +20,7 @@ urlpatterns=[
     path("password_reset", PasswordReset.as_view(), name="password_reset"),
     path("user-desc", UserDesc.as_view(), name="user_desc"),
     path("user-skill", SkillUser.as_view(), name="user_skill"),
+    path("remove-skill/<int:id>", DeleteSkill.as_view(), name="remove_skill"),
 
     
 
