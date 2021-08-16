@@ -136,15 +136,21 @@
                     left: 285px;">
                 <i class="fas fa-edit text-secondary"></i>
             </button>
-                <div class="border mx-2 p-2  rounded-3">
+
+                <div class="border mx-2 p-4  rounded-3">
                    
                     <h5 class="fw-light">About</h5>
-                   
-                    <p class="mt-2">I am a web developer with .. skills and ...
-                        saddddddddddddddddddd
+                    {% if request.user.description == Null %}
+                    <p class="mt-2 text-secondary">Write about yourself.....
                     </p>
+                    {%else%}
+                    <p class="mt-2 fw-light text-justify">{{request.user.description}}
+                    </p>
+                    {%endif%}
+
 
                 </div>
+              
                 <button type="button" class="btn btn-white" data-bs-toggle="modal" data-bs-target="#exampleModal2"
                 style=" font-size: 15px;
                     position: relative;
@@ -152,9 +158,11 @@
                     left: 285px;">
                 <i class="fas fa-edit text-secondary"></i>
             </button>
-                <div class="border  mx-2 p-2 rounded-3">
-                   <h5 class="fw-light">Skills</h5>
-                    <p>Python - Intermediate</p>
+                <div class="border  mx-2 p-4 rounded-3">
+                    <h5 class="fw-light">Skills</h5>
+                    {% for i in userskill %}
+                    <p>{{i.skill.skill}} - {{i.level}}</p>
+                  {%endfor%}
                 </div>
             <div class="d-flex justify-content-center">
                 <a href="{% url 'dpapp:adddoubt' %}"
@@ -209,8 +217,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST">
-                    <textarea class="form-control" placeholder="write about yourself..." rows="7" maxlength="500" id="floatingTextarea"></textarea>
+                    <form method="POST" action="{% url 'accounts:user_desc' %}">
+                        {% csrf_token %}
+                    <textarea class="form-control" placeholder="write about yourself..." rows="7" maxlength="500" id="floatingTextarea" name="desc" >{{request.user.description}}</textarea>
                    
                 </div>
                 <div class="modal-footer">
@@ -231,30 +240,53 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST">
-                    <div class="row col-lg-10 mx-auto">
-                        <div class="col-md-4">
-                            <select name="" id="">
-                            <option value="">Choose skill</option>
-                            <option value="">Django</option>
-                            <option value="">Python</option>
-                        </select>
+                    {% for i in userskill %}
+                    <div class="  col-lg-8 mx-auto my-2">
+                        <div class="row">
+                            <div class="col-lg-4 mx-2 border text-center">
+                                <p class="fw-light ">{{i.skill.skill}}</p>
+                            </div>
+                            <div class="col-lg-6  border text-center">
+                                <p class="fw-light">{{i.level}}</p>
+                            </div>
+                            <div class="col lg 2">
+                                <a class="text-secondary" href=""><i class="fa fa-trash"></i></a>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <select name="" id="">
-                            <option value="">Choose level</option>
-                            <option value="">Beginner</option>
-                            <option value="">Intermediate</option>
-                            <option value="">Expert</option>
-                        </select>
-
+                    </div>
+                    {%endfor%}
+                   
+                    
+                    <hr>
+                    <form method="POST" action="{% url 'accounts:user_skill' %}">
+                        {% csrf_token %}
+                    <div class="row col-lg-12 mx-auto"> 
+                       
+                        <div class="col-md-6">
+                            <input list="skills" name="skill" placeholder="Choose Skill"required>
+                            <datalist id="skills" id="" >
+                                {% for i in skill %}
+                                <option value="{{i}}">
+                                {%endfor%}
+                            </datalist>
+                        </div>
+                        <div class="col-lg-3">
+                            <select name="level" id="" required style="height: 30px;">
+                                <!-- <option value="">Choose level</option> -->
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Expert">Expert</option>
+                            </select>
+                         </div>
+                        <div class="col-lg-3">
+                        <button type="submit" class="btn btn-success btn-sm">Add</button>
                         </div>
                     </div>
                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn bg-purple text-white">Save changes</button>
+                    <button type="button" class="btn bg-purple text-white" data-bs-dismiss="modal">Save changes</button>
+                   
                 </div>
                 </form>
             </div>

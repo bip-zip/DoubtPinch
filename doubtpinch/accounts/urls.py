@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from .views import *
 from django.urls import path,include
-from .views import UserSignin,ActivateAccount
+from .views import UserSignin,ActivateAccount,UserDesc
 from django.contrib.auth.views import LogoutView, LoginView
 
 
@@ -17,7 +17,13 @@ urlpatterns=[
     path('invalid',activation_invalid_view, name='invalid'),
     path('validate_username', validate_user, name='validate_user'),
 
-    path("password_reset", PasswordReset.as_view(), name="password_reset")      
+    path("password_reset", PasswordReset.as_view(), name="password_reset"),
+    path("user-desc", UserDesc.as_view(), name="user_desc"),
+    path("user-skill", SkillUser.as_view(), name="user_skill"),
+
+    
+
+
 
     
 

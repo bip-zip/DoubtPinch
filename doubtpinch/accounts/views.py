@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -33,7 +33,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .models import User
+from .models import Skill, User, UserSkill
 from django.conf import settings
 from django.http import HttpResponse
 
@@ -166,4 +166,23 @@ class PasswordReset(View):
             return redirect('accounts:password_reset')
             
             
+class UserDesc(View):
+    def post(self,request,*args, **kwargs):
+        a_user=self.request.user
+        desc=request.POST.get('desc')
+        print(desc)
+        a_user.description=desc
         
+        a_user.save()
+        return redirect('dpapp:profile')
+
+
+class SkillUser(View):
+    def post(self,request,*args, **kwargs):
+        a_user=self.request.user
+        level=request.POST.get('level')
+        skill_id =request.POST.get('skill')
+        print(level,skill_id)
+        skill=Skill.objects.get(skill=skill_id)
+        UserSkill.objects.create(user=a_user, skill=skill, level=level )
+        return redirect('dpapp:profile')

@@ -6,7 +6,7 @@ from .forms import DoubtForm, AnswerForm, CommentForm, ProfileForm
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
-from accounts.models import User
+from accounts.models import User, UserSkill, Skill
 # from .documents import DoubtDocument
 # from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
@@ -112,7 +112,8 @@ class Profile(TemplateView):
         user=User.objects.get(email=useremail)
         total_replies=Answer.objects.filter(user=user).count()
         total_upvotes=RightPoint.total_upvotes_of_answerer(self,user)
-
+        skill=Skill.objects.all()
+        userskill=UserSkill.objects.filter(user=user)
         qs1 = Doubt.objects.filter(user=user) #your first qs
         qs2 = Answer.objects.filter(user=user) #your second qs
         
@@ -130,7 +131,7 @@ class Profile(TemplateView):
             recent_activity = paginator.page(paginator.num_pages)
 
         form= ProfileForm(instance=user)
-        context.update({ 'form':form,'recent_activity':recent_activity,'total_upvotes':total_upvotes,'total_replies':total_replies})
+        context.update({ 'form':form,'recent_activity':recent_activity,'total_upvotes':total_upvotes,'total_replies':total_replies,'skill':skill,'userskill':userskill})
         return context
 
     def post(self, request, **kwargs):
@@ -378,7 +379,6 @@ class TagsView(TemplateView):
             doubts = paginator.page(paginator.num_pages)
         context.update({'counted':counted,'doubts':doubts, 'page':page, 'tagname':tagname})
         return context
-
 
 
 

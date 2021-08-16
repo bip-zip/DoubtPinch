@@ -20,6 +20,7 @@ class User(AbstractUser):
     is_admin = models.BooleanField(default=False)
     is_seller = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
+    description=models.TextField(null=True)
 
  
 
@@ -80,3 +81,16 @@ class User(AbstractUser):
     # def is_active(self):
     #     "Is the user active?"
     #     return self.is_active
+class Skill (models.Model):
+    skill=models.CharField(max_length=50, null=False, unique=True)
+
+    def __str__(self):
+        return self.skill
+
+class UserSkill(models.Model):
+    user= models.ForeignKey(User,on_delete=models.CASCADE)
+    skill=models.ForeignKey(Skill,on_delete=models.CASCADE)
+    level=models.CharField(max_length=30,null=True)
+
+    def __str__(self):
+        return str(self.skill + self.user)
