@@ -76,8 +76,8 @@
                         {{i.user.last_name}} <i class="fw-normal text-pinch">({{i.created_on}})</i></span>
                         {% if i.user == request.user %}
                         <div class="btn-group dropstart  float-end">
-                            <button type="button" class=" dropdown-toggle pull-right" data-bs-toggle="dropdown" aria-expanded="false">
-                             
+                            <button type="button" class=" btn btn-white btn-sm dropdown-toggle pull-right" data-bs-toggle="dropdown" aria-expanded="false">
+                             <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{% url 'dpapp:update_answer' i.id %}?next={{ request.path|urlencode }}">Edit</a></li>

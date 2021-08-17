@@ -383,6 +383,7 @@ class TagsView(TemplateView):
         context.update({'counted':counted,'doubts':doubts, 'page':page, 'tagname':tagname})
         return context
 
+from django.http import HttpResponseNotFound
 class UpdateAnswer(UpdateView):
     form_class=AnswerForm
     model=Answer
@@ -392,11 +393,24 @@ class UpdateAnswer(UpdateView):
         if next_url:
             return next_url
     
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.user != self.request.user:
+            return HttpResponseNotFound("You are not allowed to edit this Post")
+        return super(UpdateAnswer, self).dispatch(request, *args, **kwargs)
+    
 class DeleteAnswer(View):
     def get(self, request, **kwargs):
         ansid=self.kwargs['id']
         Answer.objects.get(id=ansid).delete()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    def dispatch(self, request, *args, **kwargs):
+        ansid=self.kwargs['id']
+        obj=Answer.objects.get(id=ansid)
+        if obj.user != self.request.user:
+            return HttpResponseNotFound("You are not allowed to delete.")
+        return super(DeleteAnswer, self).dispatch(request, *args, **kwargs)
     
 
 # export ES_JAVA_OPTS="-Xms256m -Xmx256m"

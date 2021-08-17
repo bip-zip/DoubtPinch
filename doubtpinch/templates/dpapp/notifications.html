@@ -9,7 +9,7 @@
 <div class="container">
     <!-- Searchbar -->
     <!-- <form class="d-flex mt-3" method="GET" action="/app/search">
-                <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search doubts" name="query" 
+                <input class="form-control me-2 fs-5 fw-light" type="search" placeholder="Search notifications" name="query" 
                     aria-label="Search">
                 <button class="btn btn-info text-light fw-bold" type="submit">Search</button>
             </form> -->
@@ -67,28 +67,76 @@
 
             </div>
           
-
-
-
-
-
         </div>
-        <!-- <div class="col-lg-4 col-11 border shadow-sm mx-3 py-3 px-4 mb-3">
-            <p class="fw-light fs-6 text-center">New Questions</p>
-
-            {% for i in newdoubts%}
-
-            <a href="{% url 'dpapp:detail' i.id %}" class="text-pinch text-decoration-none fs-6">
-                <p>{{i.title}}</p>
-            </a>
-            {% endfor %}
-
-
-
-        </div> -->
+    
     </div>
 
     <!-- end Body -->
+    {% if notifications.paginator.num_pages > 1 %}
+    <div class="demo">
+        <nav class="pagination-outer" aria-label="Page navigation">
+            <ul class="pagination">
+                {% if notifications.has_previous %}
+                {% if 'heading_contains' in request.get_full_path %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ request.get_full_path }}&page={{ notifications.previous_page_number }}" tabindex="-1" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a  class="page-link" href="?page={{ notifications.previous_page_number }}" tabindex="-1" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% else%}
+                <li class="page-item disabled">
+                    <a href="#" class="page-link"  tabindex="-1" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for i in notifications.paginator.page_range %}
+                {% if i == notifications.number%}
+                <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+                {% else %}
+                    {% if 'heading_contains' in request.get_full_path %}  
+                    <li class="page-item"><a class="page-link" href="{{ request.get_full_path }}&page={{ i }}">{{ i }}</a></li>
+                    {% else %}
+                    <li class="page-item "><a class="page-link"  href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+
+                {% if notifications.has_next %}
+                {% if 'heading_contains' in request.get_full_path %}
+                <li class="page-item">
+                    <a class="page-link" aria-label="Next" href="{{ request.get_full_path }}&page={{ notifications.next_page_number }}">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" aria-label="Next" href="?page={{ notifications.next_page_number }}">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+                {%endif%}
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" aria-label="Next" href="#">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>
+                {%endif%}
+
+
+            </ul>
+        </nav>
+    </div>
+    {%endif%}
 
     <!-- Footer -->
    
