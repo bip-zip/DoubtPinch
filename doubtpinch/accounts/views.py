@@ -35,7 +35,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import Skill, User, UserSkill
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 
 
 
@@ -188,9 +188,11 @@ class SkillUser(View):
         return redirect('dpapp:profile')
 
 class DeleteSkill(View):
-    def get(self,request,*args, **kwargs):
-        skill_id=self.kwargs['id']
+    def post(self,request,*args, **kwargs):
+        skill_id=request.POST['skill_id']
+        print(skill_id)
         UserSkill.objects.get(id=skill_id).delete()
-        return redirect('dpapp:profile')
+        return JsonResponse({'bool':True})
+
 
 

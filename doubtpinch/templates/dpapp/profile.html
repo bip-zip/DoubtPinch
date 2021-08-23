@@ -237,7 +237,8 @@
                     <h5 class="modal-title" id="exampleModalLabel">Your Skills: </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" >
+                    <div id="here">
                     {% for i in userskill %}
                     <div class="  col-lg-8 mx-auto my-2">
                         <div class="row">
@@ -248,11 +249,12 @@
                                 <span class="fw-light">{{i.level}}</span>
                             </div>
                             <div class="col lg 2">
-                                <a class="text-secondary" href="{% url 'accounts:remove_skill' i.id%}"><i class="fa fa-trash"></i></a>
+                                <span style="cursor: pointer;" class="text-secondary remove-click"  data-skill='{{i.id}}' ><i class="fa fa-trash"></i></span>
                             </div>
                         </div>
                     </div>
                     {%endfor%}
+                </div>
                    
                     
                     <hr>
@@ -358,5 +360,31 @@
     </div>
     {%endif%}
 </div>
+
+<script>
+    $('.remove-click').on('click', function () {
+        var skillid = $(this).data('skill');
+        console.log(skillid);
+
+        $.ajax({
+            url: "{% url 'accounts:remove_skill'%}",
+            type: 'post',
+            data: {
+                skill_id: skillid,
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            dataType: 'json',
+            success: function (res) {
+
+                if (res.bool == true) {
+                    $("#here").load(" #here > *");
+                        
+                   
+                }
+            }
+        });
+
+    })
+</script>
 
 {% endblock %}
