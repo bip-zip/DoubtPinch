@@ -1,0 +1,39 @@
+{% for i in data %}
+<div class="  col-lg-8 mx-auto my-2">
+    <div class="row">
+        <div class="col-lg-4 mx-2 border text-center">
+            <span class="fw-light ">{{i.skill.skill}}</span>
+        </div>
+        <div class="col-lg-6  border text-center">
+            <span class="fw-light">{{i.level}}</span>
+        </div>
+        <div class="col lg 2">
+            <span style="cursor: pointer;" class="text-secondary remove-click"  data-skill='{{i.id}}' ><i class="fa fa-trash"></i></span>
+        </div>
+    </div>
+</div>
+<script>
+    $('.remove-click').on('click', function () {
+        var skillid = $(this).data('skill');
+        console.log(skillid);
+
+        $.ajax({
+            url: "{% url 'accounts:remove_skill' %}",
+            type: 'post',
+            data: {
+                skill_id: skillid,
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            dataType: 'json',
+            success: function(res) {
+
+                    $("#here").html(res.data);
+                        
+                   
+
+            }
+        });
+
+    })
+</script>
+{%endfor%}

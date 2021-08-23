@@ -154,7 +154,7 @@
                     <button type="button" class="btn btn-white float-end" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                         <i class="fas fa-edit text-secondary"></i>
                     </button>
-                    <h5 class="fw-light">Skills</h5><hr>
+                    <h5 class="fw-light" id='skilllist'>Skills</h5><hr>
                     {% for i in userskill %}
                     <p class="fw-light"><b>{{i.skill.skill}}</b> - {{i.level}}</p>
                     {%empty%}
@@ -235,7 +235,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Your Skills: </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="location.reload();return false;"  aria-label="Close"></button>
                 </div>
                 <div class="modal-body" >
                     <div id="here">
@@ -258,20 +258,21 @@
                    
                     
                     <hr>
-                    <form method="POST" action="{% url 'accounts:user_skill' %}">
+                    <form method="POST" id='skill_form'>
                         {% csrf_token %}
+                       
                     <div class="row col-lg-12 col-md-12 col-12 mx-auto"> 
                        
                         <div class="col-lg-5 col-5 col-md-5">
-                            <input list="skills" name="skill" placeholder="Choose Skill"required>
+                            <input list="skills" name="skill" id='choose_skill' placeholder="Choose Skill" required style="width: 190px;">
                             <datalist id="skills" id="" >
                                 {% for i in skill %}
                                 <option value="{{i}}">
                                 {%endfor%}
                             </datalist>
                         </div>
-                        <div class="col-lg-4 col-4 col-md-4">
-                            <select name="level" id="" required style="height: 30px;">
+                        <div class="col-lg-4 col-4 col-md-4 ">
+                            <select name="level" id="choose_level" required style="height: 30px; width: 150px;">
                                 <!-- <option value="">Choose level</option> -->
                                 <option value="Beginner">Beginner</option>
                                 <option value="Intermediate">Intermediate</option>
@@ -285,7 +286,7 @@
                    
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-purple text-white" data-bs-dismiss="modal">Save changes</button>
+                    <button type="button" class="btn bg-purple text-white" onclick="location.reload();return false;" data-bs-dismiss="modal">Save changes</button>
                    
                 </div>
                 </form>
@@ -367,20 +368,42 @@
         console.log(skillid);
 
         $.ajax({
-            url: "{% url 'accounts:remove_skill'%}",
+            url: "{% url 'accounts:remove_skill' %}",
             type: 'post',
             data: {
                 skill_id: skillid,
                 csrfmiddlewaretoken: "{{csrf_token}}"
             },
             dataType: 'json',
-            success: function (res) {
+            success: function(res) {
+           
+                    $("#skilllist").load(window.location.href + " #skilllist" );
+                    $("#here").html(res.data);
+                  
+                    
+            }
+        });
 
-                if (res.bool == true) {
-                    $("#here").load(" #here > *");
-                        
-                   
-                }
+    })
+    $('#skill_form').on('submit', function (e) {
+        var skillid = $('#choose_skill').val();
+        var _level = $('#choose_level').val();
+        e.preventDefault();
+       
+
+        $.ajax({
+            url: "{% url 'accounts:user_skill' %}",
+            type: 'post',
+            data: {
+                skill_id: skillid,
+                level:_level,
+                csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+            dataType: 'json',
+            success: function(res) {
+                    $("#here").html(res.data);
+                  
+                    
             }
         });
 

@@ -176,23 +176,30 @@ class UserDesc(View):
         a_user.save()
         return redirect('dpapp:profile')
 
-
 class SkillUser(View):
     def post(self,request,*args, **kwargs):
         a_user=self.request.user
-        level=request.POST.get('level')
-        skill_id =request.POST.get('skill')
+        level=request.POST['level']
+        skill_id =request.POST['skill_id']
         print(level,skill_id)
         skill=Skill.objects.get(skill=skill_id)
         UserSkill.objects.create(user=a_user, skill=skill, level=level )
-        return redirect('dpapp:profile')
+        data=UserSkill.objects.filter(user=a_user)
+        t=render_to_string('dpapp/profile_skill.html',{'data':data},request=request)
+        return JsonResponse({'data':t})
+
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 
 class DeleteSkill(View):
     def post(self,request,*args, **kwargs):
         skill_id=request.POST['skill_id']
+        user=request.user
         print(skill_id)
         UserSkill.objects.get(id=skill_id).delete()
-        return JsonResponse({'bool':True})
+        data=UserSkill.objects.filter(user=user)
+        t=render_to_string('dpapp/profile_skill.html',{'data':data},request=request)
+        return JsonResponse({'data':t})
 
 
 
