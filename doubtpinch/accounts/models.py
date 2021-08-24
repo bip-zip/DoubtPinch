@@ -60,6 +60,24 @@ class User(AbstractUser):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
         return True
+
+    
+    @property
+    def apr_count(self):
+        from dpapp.models import Doubt, Answer, RightPoint, WrongPoint
+        total_apr=0
+        all_answer= Answer.objects.filter(user=self)
+        answercount= Answer.objects.filter(user=self).count()
+        total_apr=answercount*5
+        for i in all_answer:
+            answer=Answer.objects.get(id=i.id)
+            right=RightPoint.objects.filter(answer=answer).count()
+            wrong=WrongPoint.objects.filter(answer=answer).count()
+            total_apr=total_apr+(right*3)-(wrong)
+        return total_apr
+
+
+
     #
 
     
