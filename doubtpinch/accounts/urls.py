@@ -9,7 +9,6 @@ app_name='accounts'
 
 urlpatterns=[
     path('', LoginView.as_view(template_name="accounts/login.html"), name='login'),
-    # path('', LoginView.as_view(template_name="accounts/login.html",redirect_authenticated_user=True), name='login'),
     path('signup/', UserSignin.as_view(), name='signup'),
     path("logout/", LogoutView.as_view(), name="logout"),
     path('activate/<str:uidb64>/<str:token>',ActivateAccount.as_view(),name='activate'),
